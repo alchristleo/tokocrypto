@@ -12,17 +12,21 @@ class LoginForm extends React.Component{
         errors: {}
     };
 
-    onChange = (e) => {
+    onChange = (e) => 
         this.setState({
             data: {...this.state.data, [e.target.name]: e.target.value}
         });
-    };
 
     onSubmit = (e) => {
         e.preventDefault();
         const errors = this.validate(this.state.data);
-        if(Object.keys(errors).length === 0){
-            console.log(this.state.data);
+        this.setState({ errors });
+        if (Object.keys(errors).length === 0) {
+        this.props
+            .submit(this.state.data)
+            .catch(err =>
+            this.setState({ errors: err.response.data.errors})
+            );
         }
     }
 

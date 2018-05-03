@@ -10,11 +10,10 @@ export const userLoggedOut = () => ({
     type: USER_LOGGED_OUT
 });
 
-export const login = credentials => dispatch => {
+export const login = credentials => dispatch =>
     api.user.login(credentials).then(user => {
         dispatch(userLoggedIn({...user, loaded: true}));
     });
-};
 
 export const logout = () => dispatch => {
     dispatch(userLoggedOut());
