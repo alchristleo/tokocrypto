@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import { Link } from "react-router-dom";
 
-import '../../styles/HomePage.css';
+import '../../styles/font.css';
 
 class HomePage extends React.Component{
     render(){
