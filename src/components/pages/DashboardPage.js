@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import {Container} from 'reactstrap';
+import {Container} from 'reactstrap';
 import {connect} from 'react-redux';
 import TopNavbar from '../navigation/TopNavbar';
+import TableCrypto from '../crypto/TableCrypto';
 
 class DashboardPage extends React.Component{
     render(){
@@ -11,6 +12,10 @@ class DashboardPage extends React.Component{
         return (
             <div>
                 {isAuthenticated && <TopNavbar />}
+
+                <Container>
+                    <TableCrypto />
+                </Container>
             </div>
         );
     }

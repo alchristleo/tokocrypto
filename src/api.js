@@ -8,5 +8,8 @@ export default {
             axios.post("/api/users", {user}).then(res => res.data.user),
         fetchCurrentUser: () =>
             axios.get("/api/users/current_user").then(res => res.data.user)
+    },
+    books: {
+        fetchAll: () => axios.get('/api/cryptos').then(res => res.data.cryptos),
     }
 }

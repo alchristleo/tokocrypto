@@ -15,7 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import gravatarUrl from 'gravatar-url';
+//import gravatarUrl from 'gravatar-url';
 import * as actions from '../../actions/auth';
 
 import '../../styles/font.css';
@@ -28,7 +28,7 @@ class TopNavbar extends React.Component{
     toggle = () => this.setState({ isOpen: !this.state.isOpen });
     
     render(){
-        const { user, logout } = this.props;
+        const { logout } = this.props;
 
         return (
             <Navbar expand="sm" style={{
@@ -58,7 +58,7 @@ class TopNavbar extends React.Component{
                     <DropdownToggle nav>
                         <img
                         className="img-fluid rounded-circle"
-                        src={gravatarUrl(user.email, { size: 40 })}
+                        src="https://secure.gravatar.com/avatar/1c97abf43b29c030667ed3cba85a7473?size=40"
                         alt="Gravatar"
                         />
                     </DropdownToggle>
