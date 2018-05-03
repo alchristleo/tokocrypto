@@ -1,10 +1,16 @@
 import React from 'react';
 import {Container} from 'reactstrap';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import LoginForm from '../forms/LoginForm';
+import { login } from '../../actions/auth';
 
 import '../../styles/font.css';
 
 class LoginPage extends React.Component{
+    submit = data =>
+        this.props.login(data).then(() => this.props.history.push("/dashboard"));
+
     render(){
         return (
             <Container
@@ -34,4 +40,11 @@ class LoginPage extends React.Component{
     }
 }
 
-export default LoginPage;
+LoginPage.propTypes = {
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired
+    }).isRequired,
+    login: PropTypes.func.isRequired
+};
+
+export default connect(null, { login })(LoginPage);
