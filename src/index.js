@@ -9,6 +9,7 @@ import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import {fetchCurrentUserSuccess, fetchCurrentUserRequest} from "./actions/users";
 import setAuthorizationHeader from './utils/setAuthorizationHeader';
 import rootReducer from "./rootReducer";
 import history from './history';
