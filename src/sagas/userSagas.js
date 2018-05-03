@@ -7,7 +7,7 @@ import history from '../history';
 export function* createUserSaga(action) {
     try {
         const user = yield call(api.user.signup, action.user);
-        localStorage.bookwormJWT = user.token;
+        localStorage.tcJWT = user.token;
         yield put(userLoggedIn(user));
         history.push("/dashboard");
     } catch (err) {
