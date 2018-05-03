@@ -1,3 +1,7 @@
 h1, h2, .nav-title{
     font-family: 'Baumans', cursive;
 }
+.nav-title{
+    font-size: 2em;
+    color: white;
+}

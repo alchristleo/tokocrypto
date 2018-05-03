@@ -32,9 +32,11 @@ class TopNavbar extends React.Component{
 
         return (
             <Navbar expand="sm" style={{
-                backgroundColor: "#42b549"
+                backgroundColor: "#42b549",
             }}>
-                <NavbarBrand className=".nav-title" tag={RouterNavLink} activeClassName="active" to="/">
+                <NavbarBrand className=".nav-title" tag={RouterNavLink} activeClassName="active" to="/" style={{
+                fontSize: "2em", color: "white"
+            }}>
                 tokocrypto
                 </NavbarBrand>
                 <NavbarToggler onClick={this.toggle} />

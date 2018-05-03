@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Container} from 'reactstrap';
+//import {Container} from 'reactstrap';
 import {connect} from 'react-redux';
 import TopNavbar from '../navigation/TopNavbar';
 
@@ -9,9 +9,9 @@ class DashboardPage extends React.Component{
         const { isAuthenticated } = this.props;
 
         return (
-            <Container>
+            <div>
                 {isAuthenticated && <TopNavbar />}
-            </Container>
+            </div>
         );
     }
 };

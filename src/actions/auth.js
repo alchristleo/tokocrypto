@@ -19,5 +19,7 @@ export const login = credentials => dispatch =>
     });
 
 export const logout = () => dispatch => {
+    localStorage.removeItem("tcJWT");
+    setAuthorizationHeader();
     dispatch(userLoggedOut());
 };
