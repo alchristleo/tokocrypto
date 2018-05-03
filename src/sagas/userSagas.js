@@ -6,7 +6,7 @@ import history from '../history';
 
 export function* createUserSaga(action) {
     try {
-        const user = yield call(api.user.signup, action.user);
+        const user = yield call(api.user.register, action.user);
         localStorage.tcJWT = user.token;
         yield put(userLoggedIn(user));
         history.push("/dashboard");
