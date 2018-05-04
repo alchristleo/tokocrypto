@@ -1,6 +1,6 @@
 import React from 'react';
 //import axios from 'axios';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { Table } from 'reactstrap';
 import NumberFormat from 'react-number-format';
@@ -9,7 +9,11 @@ import FaArrowCircleOUp from 'react-icons/lib/fa/arrow-circle-o-up';
 
 import '../../styles/font.css';
 
-class TableCrypto extends React.Component {
+const array = window.location.href.split('market/');
+const crSymbol = array[1];
+
+
+class DetailCrypto extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -18,24 +22,18 @@ class TableCrypto extends React.Component {
     }
 
     componentDidMount(){
-        this.timer = setInterval(()=> this.getList(), 1000)
+        this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
     };
 
-    async getList(){
-        fetch("/api/cryptos/")
+    async getSelectecCrypto(){
+        fetch("/api/cryptos/current-crypto")
         .then(response => response.json())
         .then(data => this.setState({cryptos: data.cryptos}))
     }
 
-    // navigate = (e) => {
-    //     const query = e.target.value;
-    //     const path = `/market/${query}`;
-    //     console.log(path);
-    //     this.props.history.push(path);
-    // }
-
     render() {
         const { cryptos } = this.state;
+        
 
         return (
         <Table bordered hover size="sm">
@@ -49,8 +47,8 @@ class TableCrypto extends React.Component {
             </tr>
             </thead>
             <tbody>
-            {cryptos.map(item => (
-                <tr key={item.id} id={item.id} value={item.symbol} onClick={() => window.location.href=`/market/${item.symbol}`}>
+            {cryptos.filter(x => x.symbol === crSymbol).map(item => (
+                <tr key={item.id} id={item.id} value={item.symbol}>
                     <th scope="row">{item.symbol}/IDR</th>
                     <td>{item.name}</td>
                     <td><NumberFormat 
@@ -73,10 +71,4 @@ class TableCrypto extends React.Component {
     }
 }
 
-TableCrypto.propTypes = {
-    history: PropTypes.shape({
-        push: PropTypes.func.isRequired
-    }).isRequired
-};
-
-export default connect(null, {})(TableCrypto);
+export default connect(null, {})(DetailCrypto);
