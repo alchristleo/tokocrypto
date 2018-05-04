@@ -9,6 +9,7 @@ import HomePage from './components/pages/HomePage.js';
 import LoginPage from './components/pages/LoginPage.js';
 import RegisterPage from './components/pages/RegisterPage.js';
 import DashboardPage from './components/pages/DashboardPage.js';
+import BuySellPage from './components/pages/BuySellPage.js';
 //import { fetchCurrentUserRequest } from "./actions/users";
 import TopNavbar from './components/navigation/TopNavbar';
 
@@ -27,6 +28,7 @@ class App extends Component {
             <GuestRoute location={location} path="/login" exact component={LoginPage} />
             <GuestRoute location={location} path="/register" exact component={RegisterPage} />
             <UserRoute location={location} path="/dashboard" exact component={DashboardPage} />
+            <UserRoute location={location} path="/market/:query" exact component={BuySellPage} />
 
       </div>
     );

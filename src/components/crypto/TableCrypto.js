@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { Table } from 'reactstrap';
@@ -9,15 +9,7 @@ import FaArrowCircleOUp from 'react-icons/lib/fa/arrow-circle-o-up';
 
 import '../../styles/font.css';
 
-class TableCypto extends React.Component {
-    // state = {
-    //     data: {
-    //         id: this.props.crypto.id,
-    //         name: this.props.crypto.name,
-    //         price_usd: this.props.crypto.price_usd,
-    //         percent_change_24h: this.props.crypto.percent_change_24h
-    //     }
-    // };
+class TableCrypto extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -25,37 +17,19 @@ class TableCypto extends React.Component {
         }
     }
 
-
-    // componentWillReceiveProps(props) {
-    //     this.setState({
-    //         data: {
-    //             id: props.crypto.id,
-    //             name: props.crypto.name,
-    //             price_usd: props.crypto.price_usd,
-    //             percent_change_24h: props.crypto.percent_change_24h
-    //         }
-    //     });
-    // }
-
     componentDidMount(){
         this.timer = setInterval(()=> this.getList(), 1000)
-        // .then(cryptos => {
-        //     const options = [];
-        //     cryptos.forEach(crypto => {
-        //         options.push({
-        //             id: crypto.id,
-        //             name: crypto.name,
-        //             price_usd: crypto.price_usd,
-        //             percent_change_24h: crypto.percent_change_24h
-        //         })
-        //     })
-        // })
     };
 
     async getList(){
         fetch("/api/cryptos/")
         .then(response => response.json())
         .then(data => this.setState({cryptos: data.cryptos}))
+    }
+
+    navigate = () => {
+        const path = '/dashboard';
+        this.props.history.push(path);
     }
 
     render() {
@@ -69,15 +43,16 @@ class TableCypto extends React.Component {
                 <th>Asset Name</th>
                 <th>Last Price</th>
                 <th>% Change</th>
+                <th>Balance</th>
             </tr>
             </thead>
             <tbody>
             {cryptos.map(item => (
-                <tr key={item.id} id={item.id}>
+                <tr key={item.id} id={item.id} value={item.symbol} onClick={this.navigate}>
                     <th scope="row">{item.symbol}/IDR</th>
                     <td>{item.name}</td>
                     <td><NumberFormat 
-                        value={item.price_usd * 13000} 
+                        value={item.price_usd * 13800} 
                         displayType={'text'} 
                         thousandSeparator={true} 
                         prefix={'IDR '} 
@@ -87,6 +62,7 @@ class TableCypto extends React.Component {
                         <span style={{color: "#15E100"}}><FaArrowCircleOUp /> {item.percent_change_24h}%</span> : 
                         <span style={{color: "#e6393e"}}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                     </td>
+                    <td>0 {item.symbol}</td>
                 </tr>
             ))}
             </tbody>
@@ -95,4 +71,10 @@ class TableCypto extends React.Component {
     }
 }
 
-export default connect()(TableCypto);
+TableCrypto.propTypes = {
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired
+    }).isRequired
+};
+
+export default connect(null, {})(TableCrypto);

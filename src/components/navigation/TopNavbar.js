@@ -29,10 +29,14 @@ class TopNavbar extends React.Component{
     };
 
     componentDidMount(){
+        this.timer = setInterval(()=> this.getList(), 1000)
+    };
+
+    async getList(){
         fetch("/api/cryptos/bitcoin-price")
         .then(response => response.json())
         .then(data => this.setState({cryptos: data.cryptos}))
-    };
+    }
 
     toggle = () => this.setState({ isOpen: !this.state.isOpen });
     
@@ -67,7 +71,7 @@ class TopNavbar extends React.Component{
                     <Button outline color="success" style={{backgroundColor: "#28a745", color:"white"}}>
                         1 BTC = {cryptos.map(item => (
                             <span key={item.id}><NumberFormat 
-                        value={item.price_usd * 13000} 
+                        value={item.price_usd * 13800} 
                         displayType={'text'} 
                         thousandSeparator={true} 
                         prefix={'IDR '} 
