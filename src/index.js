@@ -30,7 +30,8 @@ if (localStorage.tcJWT) {
     const user = {
         token: localStorage.tcJWT,
         email: payload.email,
-        username: payload.username
+        username: payload.username,
+        balance: payload.balance
     };
     store.dispatch(userLoggedIn(user));
     //store.dispatch(fetchCurrentUserRequest());

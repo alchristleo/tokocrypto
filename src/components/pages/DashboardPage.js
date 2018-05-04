@@ -14,6 +14,7 @@ class DashboardPage extends React.Component{
                 {isAuthenticated && <TopNavbar />}
 
                 <Container>
+                    <h3 style={{marginTop:20}}>IDR Market</h3>
                     <TableCrypto />
                 </Container>
             </div>

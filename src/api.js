@@ -9,7 +9,8 @@ export default {
         fetchCurrentUser: () =>
             axios.get("/api/users/current_user").then(res => res.data.user)
     },
-    books: {
+    cryptos: {
         fetchAll: () => axios.get('/api/cryptos').then(res => res.data.cryptos),
+        fetchBTC: () => axios.get('/api/cryptos/bitcoin-price').then(res => res.data.cryptos)
     }
 }

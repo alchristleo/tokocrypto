@@ -5,3 +5,6 @@ h1, h2, .nav-title{
     font-size: 2em;
     color: white;
 }
+tr:hover{
+    cursor: pointer;
+}
