@@ -29,7 +29,8 @@ class TopNavbar extends React.Component{
     };
 
     componentDidMount(){
-        this.timer = setInterval(()=> this.getList(), 1000)
+        this.getList();
+        this.timer = setInterval(()=> this.getList(), 300000)
     };
 
     async getList(){

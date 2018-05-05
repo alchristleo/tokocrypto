@@ -68,7 +68,8 @@ class BuyForm extends React.Component{
             {cryptos.filter(x => x.symbol === crSymbol).map(item => (
             <div>
             <FormGroup row>
-            <Label for="Balance" sm={12}>Balance: <NumberFormat 
+            <Label for="Balance" sm={3}>Balance: </Label>
+            <Label sm={9}><NumberFormat 
                         value={user.balance} 
                         displayType={'text'} 
                         thousandSeparator={true} 
@@ -87,22 +88,18 @@ class BuyForm extends React.Component{
 
             <FormGroup row>
                 <Label for="price" sm={3}>Price</Label>
-                <Col sm={9}>
-                    <Label><NumberFormat 
+                    <Label sm={9}><NumberFormat 
                         value={item.price_usd * 13800} 
                         displayType={'text'} 
                         thousandSeparator={true} 
                         prefix={'IDR '} 
                         decimalScale={0}
                         /></Label>
-                </Col>
             </FormGroup>
 
             <FormGroup row>
                 <Label for="Total" sm={3}>Total {crSymbol}: </Label>
-                <Col sm={9}>
-                <Label value={data.idr / (item.price_usd * 13800)}>{data.idr / (item.price_usd * 13800)} {crSymbol}</Label>
-                </Col>
+                <Label sm={9} value={data.idr / (item.price_usd * 13800)}>{data.idr / (item.price_usd * 13800)} {crSymbol}</Label>
             </FormGroup>
             </div>
             ))}
