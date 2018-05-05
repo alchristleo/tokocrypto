@@ -22,7 +22,8 @@ class DetailCrypto extends React.Component {
     }
 
     componentDidMount(){
-        this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
+        this.getSelectecCrypto();
+        this.timer = setInterval(()=> this.getSelectecCrypto(), 300000)
     };
 
     async getSelectecCrypto(){

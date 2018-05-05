@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr'; 
 import { CRYPTOS_FETCHED, CRYPTOS_CREATED } from '../types';
 import api from '../api';
-import { cryptoSchema } from '../schema';
+import { cryptoSchema } from '../schemas/cryptoSchema';
 
 const cryptosFetched = (data) => ({
 	type: CRYPTOS_FETCHED,

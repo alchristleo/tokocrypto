@@ -4,7 +4,6 @@ import {
 } from 'reactstrap';
 import {connect} from 'react-redux';
 import PropTypes from "prop-types";
-import Validator from "validator";
 import NumberFormat from 'react-number-format';
 
 const array = window.location.href.split('market/');

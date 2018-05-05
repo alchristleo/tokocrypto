@@ -8,16 +8,22 @@ import BuyForm from '../forms/BuyForm';
 import SellForm from '../forms/SellForm';
 import { allCryptosSelector } from "../../reducers/crypto";
 import { fetchCryptos } from '../../actions/cryptos';
+import { createTransactions } from '../../actions/transactions';
 
 const array = window.location.href.split('market/');
 const crSymbol = array[1];
 
 class BuySellPage extends React.Component{
+    state = {
+		transaction: null
+	};
     
     componentDidMount = () => this.onInit(this.props);
     
     onInit = (props) => props.fetchCryptos();
-    submit = data => this.props.history.push("/dashboard");
+    
+    addTransactions = (transaction) => this.props.createTransactions(transaction)
+		.then(() => this.props.history.push('/dashboard'));
 
     render(){
         const { isAuthenticated, cryptos } = this.props;
@@ -40,7 +46,7 @@ class BuySellPage extends React.Component{
                                         color: "#42b549", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
                                     }}>Buy {crSymbol}</h2>
                                     <div className="card-body">
-                                        <BuyForm />
+                                        <BuyForm submit={this.addTransactions} transaction={this.state.transaction}/>
                                     </div>
                                 </div>
                             </div>
@@ -71,6 +77,7 @@ class BuySellPage extends React.Component{
 };
 
 BuySellPage.propTypes = {
+    createTransactions: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
     fetchCryptos: PropTypes.func.isRequired,
     cryptos: PropTypes.arrayOf(PropTypes.shape({
@@ -88,4 +95,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { fetchCryptos })(BuySellPage);
+export default connect(mapStateToProps, { fetchCryptos, createTransactions })(BuySellPage);

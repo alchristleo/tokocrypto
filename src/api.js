@@ -14,5 +14,9 @@ export default {
         fetchBTC: () => axios.get('/api/cryptos/bitcoin-price').then(res => res.data.cryptos),
         fetchCurrent: () => axios.get('/api/cryptos/current-crypto').then(res => res.data.cryptos),
         create: crypto => axios.post('/api/cryptos', { crypto }).then(res => res.data.crypto) 
+    },
+    transactions: {
+        fetchAll: () => axios.get('/api/transactions').then(res => res.data.transactions),
+        create: transaction => axios.post('/api/transactions', { transaction }).then(res => res.data.transaction) 
     }
 }

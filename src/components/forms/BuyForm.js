@@ -10,14 +10,17 @@ const array = window.location.href.split('market/');
 const crSymbol = array[1];
 
 class BuyForm extends React.Component{
-    state = {
-        data: {
-            idr: '',
-            total: ''
-        },
-        cryptos: [],
-        errors: {}
-    };
+    constructor (props) {
+        super(props);
+        this.state = {
+            data: {
+                cryptocur: crSymbol,
+                totalidr: ''
+            },
+            cryptos: [],
+            errors: {}
+        };
+    }
 
     componentDidMount(){
         this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
@@ -31,13 +34,13 @@ class BuyForm extends React.Component{
     onSubmit = (e) => {
         e.preventDefault();
         const errors = this.validate(this.state.data);
-        console.log(errors);
+        console.log(this.state.data);
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
         this.props
             .submit(this.state.data)
             .catch(err =>
-            this.setState({ errors: err.response.data.errors})
+                this.setState({ errors: err.response.data.errors})
             );
         }
     }
@@ -51,8 +54,8 @@ class BuyForm extends React.Component{
     validate = data => {
         const errors = {};
         const {user} = this.props;
-        if(!data.idr) errors.idr = alert("IDR input can't be blank!");
-        if(data.idr > user.balance) errors.idr = alert("Input exceeding user balance!");
+        if(!data.totalidr) errors.totalidr = alert("IDR input can't be blank!");
+        if(data.totalidr > user.balance) errors.totalidr = alert("Input exceeding user balance!");
         return errors;
     }
 
@@ -65,7 +68,7 @@ class BuyForm extends React.Component{
             {errors.global && (
             <div className="alert alert-danger">{errors.global}</div>
             )}
-            {cryptos.filter(x => x.symbol === crSymbol).map(item => (
+            {cryptos.filter(x => x.symbol === crSymbol).map((item, index) => (
             <div>
             <FormGroup row>
             <Label for="Balance" sm={3}>Balance: </Label>
@@ -81,25 +84,28 @@ class BuyForm extends React.Component{
             <FormGroup row>
                 <Label for="totalidr" sm={3}>Total IDR</Label>
                 <Col sm={9}>
-                    <Input type="idr" name="idr" id="idr" placeholder="" onChange={this.onChange} />
+                    <Input type="totalidr" name="totalidr" id="totalidr" placeholder="" onChange={this.onChange} />
                 </Col>
                 <div className="invalid-feedback">{errors.idr}</div>
             </FormGroup>
 
             <FormGroup row>
                 <Label for="price" sm={3}>Price</Label>
-                    <Label sm={9}><NumberFormat 
-                        value={item.price_usd * 13800} 
-                        displayType={'text'} 
-                        thousandSeparator={true} 
-                        prefix={'IDR '} 
-                        decimalScale={0}
-                        /></Label>
+                <Label sm={9}><NumberFormat 
+                    value={item.price_usd * 13800} 
+                    displayType={'text'} 
+                    thousandSeparator={true} 
+                    prefix={'IDR '} 
+                    decimalScale={0}
+                    /></Label>
             </FormGroup>
 
             <FormGroup row>
-                <Label for="Total" sm={3}>Total {crSymbol}: </Label>
-                <Label sm={9} value={data.idr / (item.price_usd * 13800)}>{data.idr / (item.price_usd * 13800)} {crSymbol}</Label>
+                <Label for="cryptoGet" sm={3}>Total {crSymbol}: </Label>
+                {/* <Col sm={9}>
+                <Input type="totalidr" name="totalidr" id="totalidr" value={data.totalidr / (item.price_usd * 13800)} placeholder="" onChange={this.onChange} />
+                </Col> */}
+                <Label onChange={this.onChange} name="totalget" id="totalget" sm={9} value={data.totalidr / (item.price_usd * 13800)}>{data.totalidr / (item.price_usd * 13800)} {crSymbol}</Label>
             </FormGroup>
             </div>
             ))}
