@@ -18,9 +18,19 @@ git clone https://github.com/alchristleo/alcphone-react.git
 cd alcphone-react
 yarn install
 ```
-### Before run the project you need to start the server first, link is on above, after start then: 
+### Before run the project you need to start the server first [here](https://github.com/alchristleo/tc-api), after start then: 
 ```
 yarn start
 open http://localhost:3000
 ```
+
+## Eslint setup
+eslint
+eslint-config-airbnb
+eslint-config-prettier
+eslint-plugin-import
+eslint-plugin-jsx-a11y
+eslint-plugin-prettier
+eslint-plugin-react
+prettier
 
