@@ -15,7 +15,7 @@ This is the client side/front-end of Tokocrpto created using ReactJS, and redux.
 ## How to run this project?
 ```
 git clone https://github.com/alchristleo/tokocrypto.git
-cd alcphone-react
+cd tokocrypto
 yarn install
 ```
 ### Before run the project you need to start the server first [here](https://github.com/alchristleo/tc-api), after start then: 
