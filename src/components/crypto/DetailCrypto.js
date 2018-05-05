@@ -28,6 +28,7 @@ class DetailCrypto extends React.Component {
     async getSelectecCrypto(){
         fetch("/api/cryptos/current-crypto")
         .then(response => response.json())
+        //.then(data => console.log(data))
         .then(data => this.setState({cryptos: data.cryptos}))
     }
 
@@ -42,6 +43,7 @@ class DetailCrypto extends React.Component {
                 <th>Market</th>
                 <th>Asset Name</th>
                 <th>Last Price</th>
+                <th>Volume (USD)</th>
                 <th>% Change</th>
                 <th>Balance</th>
             </tr>
@@ -56,6 +58,13 @@ class DetailCrypto extends React.Component {
                         displayType={'text'} 
                         thousandSeparator={true} 
                         prefix={'IDR '} 
+                        decimalScale={0}
+                        /></td>
+                    <td><NumberFormat 
+                        value={item.market_cap_usd} 
+                        displayType={'text'} 
+                        thousandSeparator={true} 
+                        prefix={'$ '} 
                         decimalScale={0}
                         /></td>
                     <td>{item.percent_change_24h > 0 ? 
