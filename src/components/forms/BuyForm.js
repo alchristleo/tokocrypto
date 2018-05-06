@@ -16,7 +16,8 @@ class BuyForm extends React.Component{
             data: {
                 cryptocur: crSymbol,
                 totalidr: '',
-                totalget: ''
+                totalget: '',
+                type: 'buy'
             },
             cryptos: [],
             errors: {}
@@ -35,7 +36,7 @@ class BuyForm extends React.Component{
     onSubmit = (e) => {
         e.preventDefault();
         const errors = this.validate(this.state.data);
-        //console.log(this.state.data);
+        console.log(this.state.data);
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
         this.props
@@ -44,6 +45,13 @@ class BuyForm extends React.Component{
                 this.setState({ errors: err.response.data.errors})
             );
         }
+        this.setState({data: {
+            cryptocur: crSymbol,
+            totalidr: '',
+            totalget: '',
+            type: 'buy'
+        }});
+        this.cancelCourse();
     }
 
     async getSelectecCrypto(){
@@ -52,18 +60,23 @@ class BuyForm extends React.Component{
         .then(data => this.setState({cryptos: data.cryptos}))
     }
 
+    cancelCourse = () => { 
+        this.myFormRef.reset();
+    }
+
     validate = data => {
         const errors = {};
         const {user} = this.props;
         if(!data.totalidr) errors.totalidr = alert("IDR input can't be blank!");
         if(data.totalidr > user.balance) errors.totalidr = alert("Input exceeding user balance!");
+        if(isNaN(data.totalidr)) errors.totalidr = alert("Input must be number");
         return errors;
     }
 
     render(){
         const { user } = this.props;
         const { cryptos, errors, data } = this.state;
-        let totalGet = 0;
+        let totalGet;
         for(let i = 0; i< cryptos.length; i++){
             if(cryptos[i].symbol === crSymbol){
                 totalGet = cryptos.length > 0 ? data.totalidr / (cryptos[i].price_usd * 13800) : 0;
@@ -71,7 +84,7 @@ class BuyForm extends React.Component{
         }
 
         return (
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit} ref={(el) => this.myFormRef = el}>
             {errors.global && (
             <div className="alert alert-danger">{errors.global}</div>
             )}
@@ -91,7 +104,13 @@ class BuyForm extends React.Component{
             <FormGroup row>
                 <Label for="totalidr" sm={3}>Total IDR</Label>
                 <Col sm={9}>
-                    <Input type="totalidr" name="totalidr" id="totalidr" placeholder="" onChange={this.onChange(totalGet)} />
+                    <Input
+                        ref={(ref) => this.mainInput = ref} 
+                        type="totalidr" 
+                        name="totalidr" 
+                        id="totalidr" 
+                        placeholder="" 
+                        onChange={this.onChange(totalGet)} />
                 </Col>
                 <div className="invalid-feedback">{errors.idr}</div>
             </FormGroup>
