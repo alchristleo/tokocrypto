@@ -18,7 +18,11 @@ class DetailCrypto extends React.Component {
         super(props)
         this.state = {
             cryptos: [],
-            transactions: props.transactions
+            transactions: {
+                totalget: '',
+                cyptocur: '',
+                totalidr: ''
+            }
         }
     }
 
@@ -27,9 +31,13 @@ class DetailCrypto extends React.Component {
         this.timer = setInterval(()=> this.getSelectecCrypto(), 300000)
     };
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({transactions: nextProps.transactions});
-        console.log(this.state.transactions);
+    componentWillReceiveProps() {
+        const {transactions} = this.props;
+        this.setState({transactions: {
+            totalget: '0.54321898',
+            cryptocur: crSymbol,
+            totalidr: '5000000'
+        }});
     }
 
     async getSelectecCrypto(){
@@ -40,15 +48,14 @@ class DetailCrypto extends React.Component {
     }
 
     render() {
-        const { cryptos } = this.state;
+        const { cryptos, transactions } = this.state;
         //console.log(this.props.transactions);
-        // let totalGet;
+        //let totalGet;
         // for(let i = 0; i< transactions.length; i++){
         //     if(transactions[i].cryptocur === crSymbol){
         //         totalGet = transactions.length > 0 ? transactions[i].totalget : 0;
         //     }
         // }
-        console.log(this.props.transactions);
 
         return (
         <Table bordered hover size="sm">
@@ -85,7 +92,8 @@ class DetailCrypto extends React.Component {
                         <span style={{color: "#15E100"}}><FaArrowCircleOUp /> {item.percent_change_24h}%</span> : 
                         <span style={{color: "#e6393e"}}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                     </td>
-                    <td> {item.symbol}</td>
+                    
+                    <td>{transactions.totalget ? transactions.totalget : 0} {item.symbol}</td>
                 </tr>
             ))}
             </tbody>
