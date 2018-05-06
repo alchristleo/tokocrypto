@@ -25,12 +25,13 @@ class BuyForm extends React.Component{
     }
 
     componentDidMount(){
+        this.getSelectecCrypto();
         this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
     };
 
     onChange = (totalGet) => (e) => 
         this.setState({
-            data: {...this.state.data, totalget: totalGet, [e.target.name]: e.target.value}
+            data: {...this.state.data, totalget: totalGet*10, [e.target.name]: e.target.value}
         });
 
     onSubmit = (e) => {
@@ -79,7 +80,7 @@ class BuyForm extends React.Component{
         let totalGet;
         for(let i = 0; i< cryptos.length; i++){
             if(cryptos[i].symbol === crSymbol){
-                totalGet = cryptos.length > 0 ? data.totalidr / (cryptos[i].price_usd * 13800) : 0;
+                totalGet = cryptos.length > 0 ? (data.totalidr / (cryptos[i].price_usd * 13800)).toFixed(9) : 0;
             }
         }
 

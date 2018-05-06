@@ -17,7 +17,8 @@ class DetailCrypto extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            cryptos: []
+            cryptos: [],
+            transactions: props.transactions
         }
     }
 
@@ -25,6 +26,11 @@ class DetailCrypto extends React.Component {
         this.getSelectecCrypto();
         this.timer = setInterval(()=> this.getSelectecCrypto(), 300000)
     };
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({transactions: nextProps.transactions});
+        console.log(this.state.transactions);
+    }
 
     async getSelectecCrypto(){
         fetch("/api/cryptos/current-crypto")
@@ -35,7 +41,14 @@ class DetailCrypto extends React.Component {
 
     render() {
         const { cryptos } = this.state;
-        
+        //console.log(this.props.transactions);
+        // let totalGet;
+        // for(let i = 0; i< transactions.length; i++){
+        //     if(transactions[i].cryptocur === crSymbol){
+        //         totalGet = transactions.length > 0 ? transactions[i].totalget : 0;
+        //     }
+        // }
+        console.log(this.props.transactions);
 
         return (
         <Table bordered hover size="sm">
@@ -72,7 +85,7 @@ class DetailCrypto extends React.Component {
                         <span style={{color: "#15E100"}}><FaArrowCircleOUp /> {item.percent_change_24h}%</span> : 
                         <span style={{color: "#e6393e"}}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                     </td>
-                    <td>0 {item.symbol}</td>
+                    <td> {item.symbol}</td>
                 </tr>
             ))}
             </tbody>
@@ -81,4 +94,11 @@ class DetailCrypto extends React.Component {
     }
 }
 
-export default connect(null, {})(DetailCrypto);
+function mapStateToProps(state) {
+    return {
+        user: state.user,
+        transactions: state.transactions
+    };
+}
+
+export default connect(mapStateToProps, {})(DetailCrypto);

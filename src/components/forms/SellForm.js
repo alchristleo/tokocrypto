@@ -115,7 +115,7 @@ class SellForm extends React.Component{
 }
 
 SellForm.propTypes = {
-    submit: PropTypes.func.isRequired
+    //submit: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

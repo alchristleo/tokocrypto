@@ -13,7 +13,7 @@ import { createTransactions } from '../../actions/transactions';
 const array = window.location.href.split('market/');
 const crSymbol = array[1];
 const path = `/market/${crSymbol}`;
-console.log(path);
+//console.log(path);
 
 class BuySellPage extends React.Component{
     state = {
@@ -26,7 +26,8 @@ class BuySellPage extends React.Component{
     
     addTransactions = (transaction) => 
         this.props.createTransactions(transaction)
-        .then(() => this.props.history.push(path));
+        .then(() => this.props.history.push(path))
+        .then(this.setState({transaction: transaction}));
 
     render(){
         const { isAuthenticated, cryptos } = this.props;
@@ -37,7 +38,7 @@ class BuySellPage extends React.Component{
                 <Container>
                     <h3 style={{marginTop:20}}>{crSymbol}/IDR Market</h3>
                     
-                    <DetailCrypto />
+                    <DetailCrypto transaction={this.state.transaction} />
                     
                     <Row style={{marginTop:50}}>
                     <Col xs={12} sm={6}>
@@ -49,7 +50,9 @@ class BuySellPage extends React.Component{
                                         color: "#42b549", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
                                     }}>Buy {crSymbol}</h2>
                                     <div className="card-body">
-                                        <BuyForm submit={this.addTransactions} transaction={this.state.transaction}/>
+                                        <BuyForm 
+                                        submit={this.addTransactions} 
+                                        transaction={this.state.transaction}/>
                                     </div>
                                 </div>
                             </div>
