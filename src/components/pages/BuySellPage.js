@@ -12,6 +12,8 @@ import { createTransactions } from '../../actions/transactions';
 
 const array = window.location.href.split('market/');
 const crSymbol = array[1];
+const path = `/market/${crSymbol}`;
+console.log(path);
 
 class BuySellPage extends React.Component{
     state = {
@@ -22,8 +24,9 @@ class BuySellPage extends React.Component{
     
     onInit = (props) => props.fetchCryptos();
     
-    addTransactions = (transaction) => this.props.createTransactions(transaction)
-		.then(() => this.props.history.push('/dashboard'));
+    addTransactions = (transaction) => 
+        this.props.createTransactions(transaction)
+        .then(() => this.props.history.push(path));
 
     render(){
         const { isAuthenticated, cryptos } = this.props;

@@ -33,7 +33,7 @@ class DashboardPage extends React.Component{
                 </Alert>
                     <h3 style={{marginTop:20}}>IDR Market</h3>
                     <TableCrypto
-                        history={{push: (path) => {}}}
+                        
                     />
                 </Container>
             </div>

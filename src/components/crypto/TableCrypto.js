@@ -11,13 +11,15 @@ import '../../styles/font.css';
 
 class TableCrypto extends React.Component {
     constructor(props){
-        super(props)
+        super(props);
+        //this.onClick = this.onClick.bind(this);
         this.state = {
             cryptos: [],
             sort: {
                 column: null,
                 direction: 'desc',
-            }
+            },
+            crClick: '',
         }
     }
 
@@ -91,6 +93,12 @@ class TableCrypto extends React.Component {
             return className;
         };
 
+        handleClickEvent = (e, value) => {
+            //e.preventDefault();
+            this.setState({crClick: value});
+            console.log(this.state.crClick);
+        }
+
     render() {
         return (
         <Table striped bordered hover size="sm">
@@ -107,7 +115,8 @@ class TableCrypto extends React.Component {
             </thead>
             <tbody>
             {this.state.cryptos.map((item, index) => { return (
-                <tr key={item.id} id={item.id} value={item.symbol} onClick={() => window.location.href=`/market/${item.symbol}`}>
+                /* <tr key={item.id} id={item.id} value={item.symbol} onClick={() => window.location.href=`/market/${item.symbol}`}> */
+                <tr key={item.id} id={item.id} value={item.symbol} onClick={() => this.handleClickEvent(this, item.symbol)}>
                     <td>{item.rank}</td>
                     <td>{item.symbol}/IDR</td>
                     <td>{item.name}</td>
@@ -139,9 +148,9 @@ class TableCrypto extends React.Component {
 }
 
 TableCrypto.propTypes = {
-    history: PropTypes.shape({
-        push: PropTypes.func.isRequired
-    }).isRequired
+    // history: PropTypes.shape({
+    //     push: PropTypes.func.isRequired
+    // }).isRequired
 };
 
 export default connect(null, {})(TableCrypto);
