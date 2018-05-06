@@ -96,7 +96,7 @@ class TableCrypto extends React.Component {
         handleClickEvent = (e, value) => {
             //e.preventDefault();
             this.setState({crClick: value});
-            console.log(this.state.crClick);
+            this.props.submit(this.state.crClick);
         }
 
     render() {
@@ -151,6 +151,7 @@ TableCrypto.propTypes = {
     // history: PropTypes.shape({
     //     push: PropTypes.func.isRequired
     // }).isRequired
+    submit: PropTypes.func.isRequired
 };
 
 export default connect(null, {})(TableCrypto);

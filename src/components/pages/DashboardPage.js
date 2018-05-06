@@ -20,6 +20,9 @@ class DashboardPage extends React.Component{
         this.setState({ visible: false });
     }
 
+    submit = data => this.props.history.push('market/BTC');
+
+
     render(){
         const { isAuthenticated } = this.props;
 
@@ -33,7 +36,7 @@ class DashboardPage extends React.Component{
                 </Alert>
                     <h3 style={{marginTop:20}}>IDR Market</h3>
                     <TableCrypto
-                        
+                        submit={this.submit}
                     />
                 </Container>
             </div>
@@ -42,6 +45,9 @@ class DashboardPage extends React.Component{
 };
 
 DashboardPage.propTypes = {
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired
+    }).isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
 };
 
