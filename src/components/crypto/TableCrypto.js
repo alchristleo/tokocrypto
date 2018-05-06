@@ -115,8 +115,8 @@ class TableCrypto extends React.Component {
             </thead>
             <tbody>
             {this.state.cryptos.map((item, index) => { return (
-                /* <tr key={item.id} id={item.id} value={item.symbol} onClick={() => window.location.href=`/market/${item.symbol}`}> */
-                <tr key={item.id} id={item.id} value={item.symbol} onClick={() => this.handleClickEvent(this, item.symbol)}>
+                <tr key={item.id} id={item.id} value={item.symbol} onClick={() => window.location.href=`/market/${item.symbol}`}>
+                {/* <tr key={item.id} id={item.id} value={item.symbol} onClick={() => this.handleClickEvent(this, item.symbol)}> */}
                     <td>{item.rank}</td>
                     <td>{item.symbol}/IDR</td>
                     <td>{item.name}</td>

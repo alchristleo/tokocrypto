@@ -15,7 +15,8 @@ class BuyForm extends React.Component{
         this.state = {
             data: {
                 cryptocur: crSymbol,
-                totalidr: ''
+                totalidr: '',
+                totalget: ''
             },
             cryptos: [],
             errors: {}
@@ -26,15 +27,15 @@ class BuyForm extends React.Component{
         this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
     };
 
-    onChange = (e) => 
+    onChange = (totalGet) => (e) => 
         this.setState({
-            data: {...this.state.data, [e.target.name]: e.target.value}
+            data: {...this.state.data, totalget: totalGet, [e.target.name]: e.target.value}
         });
 
     onSubmit = (e) => {
         e.preventDefault();
         const errors = this.validate(this.state.data);
-        console.log(this.state.data);
+        //console.log(this.state.data);
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
         this.props
@@ -62,6 +63,12 @@ class BuyForm extends React.Component{
     render(){
         const { user } = this.props;
         const { cryptos, errors, data } = this.state;
+        let totalGet = 0;
+        for(let i = 0; i< cryptos.length; i++){
+            if(cryptos[i].symbol === crSymbol){
+                totalGet = cryptos.length > 0 ? data.totalidr / (cryptos[i].price_usd * 13800) : 0;
+            }
+        }
 
         return (
             <form onSubmit={this.onSubmit}>
@@ -84,7 +91,7 @@ class BuyForm extends React.Component{
             <FormGroup row>
                 <Label for="totalidr" sm={3}>Total IDR</Label>
                 <Col sm={9}>
-                    <Input type="totalidr" name="totalidr" id="totalidr" placeholder="" onChange={this.onChange} />
+                    <Input type="totalidr" name="totalidr" id="totalidr" placeholder="" onChange={this.onChange(totalGet)} />
                 </Col>
                 <div className="invalid-feedback">{errors.idr}</div>
             </FormGroup>
@@ -102,10 +109,10 @@ class BuyForm extends React.Component{
 
             <FormGroup row>
                 <Label for="cryptoGet" sm={3}>Total {crSymbol}: </Label>
-                {/* <Col sm={9}>
-                <Input type="totalidr" name="totalidr" id="totalidr" value={data.totalidr / (item.price_usd * 13800)} placeholder="" onChange={this.onChange} />
-                </Col> */}
-                <Label onChange={this.onChange} name="totalget" id="totalget" sm={9} value={data.totalidr / (item.price_usd * 13800)}>{data.totalidr / (item.price_usd * 13800)} {crSymbol}</Label>
+                <Col sm={9}>
+                <Input type="text" name="totalget" id="totalget" value={totalGet} placeholder="" onChange={this.onChange} />
+                </Col>
+                {/* <Label name="totalget" id="totalget" sm={9} value={data.totalidr / (item.price_usd * 13800)}>{data.totalidr / (item.price_usd * 13800)} {crSymbol}</Label> */}
             </FormGroup>
             </div>
             ))}

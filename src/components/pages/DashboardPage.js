@@ -20,7 +20,10 @@ class DashboardPage extends React.Component{
         this.setState({ visible: false });
     }
 
-    submit = data => this.props.history.push('market/BTC');
+    submit = data => {
+        console.log(data);
+        //this.props.history.push('market/BTC');
+    }
 
 
     render(){
