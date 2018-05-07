@@ -8,24 +8,40 @@ import NumberFormat from 'react-number-format';
 
 const array = window.location.href.split('market/');
 const crSymbol = array[1];
+let currVal;
 
 class SellForm extends React.Component{
     state = {
         data: {
-            idr: '',
-            total: ''
+            totalget: this.props.totalget,
+            cyptocur: this.props.cyptocur,
+        },
+        data2: {
+            totalcur: '',
+            totalidr: '',
+            type: 'sell'
         },
         cryptos: [],
         errors: {}
     };
 
     componentDidMount(){
+        this.getSelectecCrypto();
         this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
     };
 
+    componentWillReceiveProps(props) {
+        this.setState({
+            data: {
+                totalget: props.transaction.totalget,
+                cryptocur: props.transaction.cryptocur,
+            }
+        })
+    }
+
     onChange = (e) => 
         this.setState({
-            data: {...this.state.data, [e.target.name]: e.target.value}
+            data2: {...this.state.data2, [e.target.name]: e.target.value}
         });
 
     onSubmit = (e) => {
@@ -35,7 +51,7 @@ class SellForm extends React.Component{
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
         this.props
-            .submit(this.state.data)
+            .submit2(this.state.data)
             .catch(err =>
             this.setState({ errors: err.response.data.errors})
             );
@@ -48,17 +64,24 @@ class SellForm extends React.Component{
         .then(data => this.setState({cryptos: data.cryptos}))
     }
 
-    validate = data => {
+    validate = data2 => {
+        const{transaction} = this.props;
+        console.log(data2.totalcur);
         const errors = {};
-        const {user} = this.props;
-        if(!data.idr) errors.idr = alert("IDR input can't be blank!");
-        if(data.idr > user.balance) errors.idr = alert("Input exceeding user balance!");
+        if(!data2.totalcur) errors.totalcur = alert("IDR input can't be blank!");
+        if(data2.totalcur > transaction.totalget) errors.totalcur = alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `);
         return errors;
     }
 
     render(){
-        const { user } = this.props;
-        const { cryptos, errors, data } = this.state;
+        const { cryptos, data, data2, errors } = this.state;
+        currVal = data.totalget;
+        let totalGet;
+        for(let i = 0; i< cryptos.length; i++){
+            if(cryptos[i].symbol === crSymbol){
+                totalGet = cryptos.length > 0 ? (data2.totalcur * (cryptos[i].price_usd * 13800)).toFixed(9) : 0;
+            }
+        }
 
         return (
             <form onSubmit={this.onSubmit}>
@@ -68,16 +91,16 @@ class SellForm extends React.Component{
             {cryptos.filter(x => x.symbol === crSymbol).map(item => (
             <div>
             <FormGroup row>
-            <Label for="Balance" sm={3}>Balance: </Label>
-            <Label sm={9}>{user.balance} {item.symbol}</Label>
+                <Label for="Balance" sm={3}>Balance: </Label>
+                <Label sm={9}>{data.totalget ? data.totalget : 0} {item.symbol}</Label>
             </FormGroup>
 
             <FormGroup row>
-                <Label for="totalidr" sm={3}>Total {item.symbol}</Label>
+                <Label for="totalcur" sm={3}>Total {item.symbol}</Label>
                 <Col sm={9}>
-                    <Input type="idr" name="idr" id="idr" placeholder="" onChange={this.onChange} />
+                    <Input type="text" name="totalcur" id="totalcur" placeholder="" onChange={this.onChange} />
                 </Col>
-                <div className="invalid-feedback">{errors.idr}</div>
+                <div className="invalid-feedback">{errors.totalcur}</div>
             </FormGroup>
 
             <FormGroup row>
@@ -93,13 +116,9 @@ class SellForm extends React.Component{
 
             <FormGroup row>
                 <Label for="Total" sm={3}>Total {crSymbol}: </Label>
-                <Label sm={9} value={data.idr * (item.price_usd * 13800)}><NumberFormat 
-                        value={data.idr * (item.price_usd * 13800)} 
-                        displayType={'text'} 
-                        thousandSeparator={true} 
-                        prefix={'IDR '} 
-                        decimalScale={0}
-                        /></Label>
+                <Col sm={9}>
+                <Input type="text" name="totalidr" id="totalidr" value={totalGet} placeholder="" onChange={this.onChange} />
+                </Col>
             </FormGroup>
             </div>
             ))}
@@ -115,14 +134,11 @@ class SellForm extends React.Component{
 }
 
 SellForm.propTypes = {
-    //submit: PropTypes.func.isRequired
+    submit2: PropTypes.func.isRequired,
+    transaction: PropTypes.shape({
+        totalget: PropTypes.number.isRequired,
+        cryptocur: PropTypes.string.isRequired,
+    }).isRequired
 };
 
-function mapStateToProps(state) {
-    return {
-        user: state.user,
-        //cryptos: state.cryptos
-    };
-}
-
-export default connect(mapStateToProps)(SellForm);
+export default connect()(SellForm);

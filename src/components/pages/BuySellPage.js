@@ -66,7 +66,10 @@ class BuySellPage extends React.Component{
                                         color: "#dc3545",  fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
                                     }}>Sell {crSymbol}</h2>
                                     <div className="card-body">
-                                        <SellForm submit={this.submit} />
+                                        <SellForm 
+                                            submit2={this.addTransaction} 
+                                            transaction={this.state.transaction}    
+                                        />
                                     </div>
                                 </div>
                             </div>
