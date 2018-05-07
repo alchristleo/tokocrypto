@@ -39,14 +39,14 @@ App.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired
   }).isRequired,
-  //isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   //fetchCurrentUserRequest: PropTypes.func.isRequired,
   //loaded: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    //isAuthenticated: !!state.user.email,
+    isAuthenticated: !!state.user.email,
     //loaded: state.user.loaded
   };
 }

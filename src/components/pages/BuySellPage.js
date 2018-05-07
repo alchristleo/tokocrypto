@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Container, Col, Row} from 'reactstrap';
 import {connect} from 'react-redux';
-import TopNavbar from '../navigation/TopNavbar';
 import DetailCrypto from '../crypto/DetailCrypto';
 import BuyForm from '../forms/BuyForm';
 import SellForm from '../forms/SellForm';
@@ -30,11 +29,10 @@ class BuySellPage extends React.Component{
         .then(this.setState({transaction: transaction}));
 
     render(){
-        const { isAuthenticated, cryptos } = this.props;
+        const { cryptos } = this.props;
 
         return (
             <div>
-                {isAuthenticated && <TopNavbar />}
                 <Container>
                     <h3 style={{marginTop:20}}>{crSymbol}/IDR Market</h3>
                     
@@ -84,7 +82,6 @@ class BuySellPage extends React.Component{
 
 BuySellPage.propTypes = {
     createTransactions: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool.isRequired,
     fetchCryptos: PropTypes.func.isRequired,
     cryptos: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string.isRequired
@@ -96,7 +93,6 @@ BuySellPage.propTypes = {
 
 function mapStateToProps(state){
     return {
-        isAuthenticated: !!state.user.email,
         cryptos: allCryptosSelector(state)
     }
 }

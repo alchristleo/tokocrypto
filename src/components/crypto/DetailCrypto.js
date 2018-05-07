@@ -1,6 +1,6 @@
 import React from 'react';
 //import axios from 'axios';
-//import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { Table } from 'reactstrap';
 import NumberFormat from 'react-number-format';
@@ -14,15 +14,13 @@ const crSymbol = array[1];
 
 
 class DetailCrypto extends React.Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            cryptos: [],
-            transactions: {
-                totalget: '',
-                cyptocur: '',
-                totalidr: ''
-            }
+    state = {
+        cryptos: [],
+        data: {
+            totalget: this.props.totalget,
+            cyptocur: this.props.cyptocur,
+            totalidr: this.props.totalidr,
+            type: this.props.type
         }
     }
 
@@ -31,13 +29,20 @@ class DetailCrypto extends React.Component {
         this.timer = setInterval(()=> this.getSelectecCrypto(), 300000)
     };
 
-    componentWillReceiveProps() {
-        const {transactions} = this.props;
-        this.setState({transactions: {
-            totalget: '0.54321898',
-            cryptocur: crSymbol,
-            totalidr: '5000000'
-        }});
+    componentWillReceiveProps(props) {
+        // this.setState({transactions: {
+        //     totalget: '0.54321898',
+        //     cryptocur: crSymbol,
+        //     totalidr: '5000000'
+        // }});
+        this.setState({
+            data: {
+                totalget: props.transaction.totalget,
+                cryptocur: props.transaction.cryptocur,
+                totalidr: props.transaction.totalidr,
+                type: props.transaction.type
+            }
+        })
     }
 
     async getSelectecCrypto(){
@@ -48,7 +53,7 @@ class DetailCrypto extends React.Component {
     }
 
     render() {
-        const { cryptos, transactions } = this.state;
+        const { cryptos, data } = this.state;
         //console.log(this.props.transactions);
         //let totalGet;
         // for(let i = 0; i< transactions.length; i++){
@@ -93,7 +98,7 @@ class DetailCrypto extends React.Component {
                         <span style={{color: "#e6393e"}}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                     </td>
                     
-                    <td>{transactions.totalget ? transactions.totalget : 0} {item.symbol}</td>
+                    <td>{data.totalget ? data.totalget : 0} {item.symbol}</td>
                 </tr>
             ))}
             </tbody>
@@ -102,11 +107,19 @@ class DetailCrypto extends React.Component {
     }
 }
 
+DetailCrypto.propTypes = {
+    transaction: PropTypes.shape({
+        totalget: PropTypes.number.isRequired,
+        cryptocur: PropTypes.string.isRequired,
+        totalidr: PropTypes.number.isRequired,
+        type: PropTypes.string.isRequired
+    }).isRequired
+};
+
 function mapStateToProps(state) {
     return {
-        user: state.user,
-        transactions: state.transactions
+        user: state.user
     };
 }
 
-export default connect(mapStateToProps, {})(DetailCrypto);
+export default connect(mapStateToProps)(DetailCrypto);

@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Container, Alert} from 'reactstrap';
-import {connect} from 'react-redux';
-import TopNavbar from '../navigation/TopNavbar';
 import TableCrypto from '../crypto/TableCrypto';
 
 class DashboardPage extends React.Component{
@@ -27,11 +25,8 @@ class DashboardPage extends React.Component{
 
 
     render(){
-        const { isAuthenticated } = this.props;
-
         return (
             <div>
-                {isAuthenticated && <TopNavbar />}
 
                 <Container>
                 <Alert color="warning" isOpen={this.state.visible} toggle={this.onDismiss} style={{marginTop: 10}}>
@@ -50,14 +45,7 @@ class DashboardPage extends React.Component{
 DashboardPage.propTypes = {
     history: PropTypes.shape({
         push: PropTypes.func.isRequired
-    }).isRequired,
-    isAuthenticated: PropTypes.bool.isRequired,
+    }).isRequired
 };
 
-function mapStateToProps(state){
-    return {
-        isAuthenticated: !!state.user.email
-    }
-}
-
-export default connect(mapStateToProps)(DashboardPage);
+export default DashboardPage;
