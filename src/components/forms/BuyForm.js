@@ -26,7 +26,7 @@ class BuyForm extends React.Component{
 
     componentDidMount(){
         this.getSelectecCrypto();
-        this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
+        this.timer = setInterval(()=> this.getSelectecCrypto(), 300000)
     };
 
     onChange = (totalGet) => (e) => 

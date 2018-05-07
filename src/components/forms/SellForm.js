@@ -18,6 +18,7 @@ class SellForm extends React.Component{
         },
         data2: {
             totalcur: '',
+            cryptocur: crSymbol,
             totalidr: '',
             type: 'sell'
         },
@@ -27,7 +28,7 @@ class SellForm extends React.Component{
 
     componentDidMount(){
         this.getSelectecCrypto();
-        this.timer = setInterval(()=> this.getSelectecCrypto(), 1000)
+        this.timer = setInterval(()=> this.getSelectecCrypto(), 300000)
     };
 
     componentWillReceiveProps(props) {
@@ -39,23 +40,29 @@ class SellForm extends React.Component{
         })
     }
 
-    onChange = (e) => 
+    onChange = (totalGet) => (e) => 
         this.setState({
-            data2: {...this.state.data2, [e.target.name]: e.target.value}
+            data2: {...this.state.data2, totalidr: totalGet*10, [e.target.name]: e.target.value}
         });
 
     onSubmit = (e) => {
         e.preventDefault();
-        const errors = this.validate(this.state.data);
-        console.log(errors);
+        const errors = this.validate(this.state.data2);
+        // this.setState({data2: {
+        //     totalcur: currVal,
+        //     cryptocur: crSymbol,
+        //     totalidr: totalGet,
+        //     type: 'sell'
+        // }});
         this.setState({ errors });
-        if (Object.keys(errors).length === 0) {
-        this.props
-            .submit2(this.state.data)
-            .catch(err =>
-            this.setState({ errors: err.response.data.errors})
-            );
-        }
+        console.log(this.state.data2);
+        // if (Object.keys(errors).length === 0) {
+        // this.props
+        //     .submit2(this.state.data)
+        //     .catch(err =>
+        //     this.setState({ errors: err.response.data.errors})
+        //     );
+        // }
     }
 
     async getSelectecCrypto(){
@@ -65,18 +72,18 @@ class SellForm extends React.Component{
     }
 
     validate = data2 => {
-        const{transaction} = this.props;
         const errors = {};
-        if(!currInput) errors.totalcur = alert("IDR input can't be blank!");
-        if(currInput > transaction.totalget) errors.totalcur = alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `);
+        if(currVal === 0){errors.totalcur = `You dont have enough ${crSymbol} balance`; alert(`Your dont enough ${crSymbol} balance`);}
+        if(currInput === 0){errors.totalcur = "IDR input can't be blank!"; alert("IDR input can't be blank!");}
+        if(currInput > currVal){errors.totalcur = `${crSymbol} input can't be greater than user ${crSymbol} balance `; alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `);}
         return errors;
     }
 
     render(){
         const { cryptos, data, data2, errors } = this.state;
+        let totalGet;
         currVal = data.totalget;
         currInput = data2.totalcur;
-        let totalGet;
         for(let i = 0; i< cryptos.length; i++){
             if(cryptos[i].symbol === crSymbol){
                 totalGet = cryptos.length > 0 ? (data2.totalcur * (cryptos[i].price_usd * 13800)).toFixed(0) : 0;
@@ -92,13 +99,18 @@ class SellForm extends React.Component{
             <div>
             <FormGroup row>
                 <Label for="Balance" sm={3}>Balance: </Label>
-                <Label sm={9}>{data.totalget ? data.totalget : 0} {item.symbol}</Label>
+                <Label sm={9}>{data.totalget ? (data.totalget).toFixed(8) : 0} {item.symbol}</Label>
             </FormGroup>
 
             <FormGroup row>
                 <Label for="totalcur" sm={3}>Total {item.symbol}</Label>
                 <Col sm={9}>
-                    <Input type="text" name="totalcur" id="totalcur" placeholder="" onChange={this.onChange} />
+                    <Input 
+                        type="text" 
+                        name="totalcur" 
+                        id="totalcur" 
+                        placeholder="" 
+                        onChange={this.onChange(totalGet)} />
                 </Col>
                 <div className="invalid-feedback">{errors.totalcur}</div>
             </FormGroup>
