@@ -8,7 +8,7 @@ import NumberFormat from 'react-number-format';
 
 const array = window.location.href.split('market/');
 const crSymbol = array[1];
-let currVal;
+let currVal; let currInput;
 
 class SellForm extends React.Component{
     state = {
@@ -66,20 +66,20 @@ class SellForm extends React.Component{
 
     validate = data2 => {
         const{transaction} = this.props;
-        console.log(data2.totalcur);
         const errors = {};
-        if(!data2.totalcur) errors.totalcur = alert("IDR input can't be blank!");
-        if(data2.totalcur > transaction.totalget) errors.totalcur = alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `);
+        if(!currInput) errors.totalcur = alert("IDR input can't be blank!");
+        if(currInput > transaction.totalget) errors.totalcur = alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `);
         return errors;
     }
 
     render(){
         const { cryptos, data, data2, errors } = this.state;
         currVal = data.totalget;
+        currInput = data2.totalcur;
         let totalGet;
         for(let i = 0; i< cryptos.length; i++){
             if(cryptos[i].symbol === crSymbol){
-                totalGet = cryptos.length > 0 ? (data2.totalcur * (cryptos[i].price_usd * 13800)).toFixed(9) : 0;
+                totalGet = cryptos.length > 0 ? (data2.totalcur * (cryptos[i].price_usd * 13800)).toFixed(0) : 0;
             }
         }
 
@@ -115,7 +115,7 @@ class SellForm extends React.Component{
             </FormGroup>
 
             <FormGroup row>
-                <Label for="Total" sm={3}>Total {crSymbol}: </Label>
+                <Label for="Total" sm={3}>Total IDR: </Label>
                 <Col sm={9}>
                 <Input type="text" name="totalidr" id="totalidr" value={totalGet} placeholder="" onChange={this.onChange} />
                 </Col>
@@ -126,7 +126,7 @@ class SellForm extends React.Component{
                 backgroundColor: "#dc3545",
                 border: "none"
             }}>
-            Buy
+            Sell
             </button>
         </form>
         );
