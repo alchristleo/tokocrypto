@@ -34,6 +34,7 @@ if (localStorage.tcJWT) {
         balance: payload.balance
     };
     store.dispatch(userLoggedIn(user));
+    console.log(store.getState())
     //store.dispatch(fetchCurrentUserRequest());
 } 
 // else {

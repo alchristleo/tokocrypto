@@ -33,6 +33,10 @@ class TopNavbar extends React.Component{
         this.timer = setInterval(()=> this.getList(), 1000)
     };
 
+    // componentWillReceiveProps(props){
+
+    // }
+
     async getList(){
         fetch("/api/cryptos/bitcoin-price")
         .then(response => response.json())
@@ -122,7 +126,8 @@ TopNavbar.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        user: state.user
+        user: state.user,
+        //transactions: state.transactions
     };
 }
 

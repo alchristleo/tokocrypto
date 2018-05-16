@@ -17,7 +17,7 @@ class SellForm extends React.Component{
             cyptocur: this.props.cyptocur,
         },
         data2: {
-            totalcur: '',
+            totalget: '',
             cryptocur: crSymbol,
             totalidr: '',
             type: 'sell'
@@ -56,19 +56,24 @@ class SellForm extends React.Component{
         // }});
         this.setState({ errors });
         console.log(this.state.data2);
-        // if (Object.keys(errors).length === 0) {
-        // this.props
-        //     .submit2(this.state.data)
-        //     .catch(err =>
-        //     this.setState({ errors: err.response.data.errors})
-        //     );
-        // }
+        if (Object.keys(errors).length === 0) {
+        this.props
+            .submit2(this.state.data2)
+            .catch(err =>
+            this.setState({ errors: err.response.data.errors})
+            );
+        }
+        this.cancelCourse();
     }
 
     async getSelectecCrypto(){
         fetch("/api/cryptos/current-crypto")
         .then(response => response.json())
         .then(data => this.setState({cryptos: data.cryptos}))
+    }
+
+    cancelCourse = () => { 
+        this.myFormRef.reset();
     }
 
     validate = data2 => {
@@ -83,15 +88,15 @@ class SellForm extends React.Component{
         const { cryptos, data, data2, errors } = this.state;
         let totalGet;
         currVal = data.totalget;
-        currInput = data2.totalcur;
+        currInput = data2.totalget;
         for(let i = 0; i< cryptos.length; i++){
             if(cryptos[i].symbol === crSymbol){
-                totalGet = cryptos.length > 0 ? (data2.totalcur * (cryptos[i].price_usd * 13800)).toFixed(0) : 0;
+                totalGet = cryptos.length > 0 ? (data2.totalget * (cryptos[i].price_usd * 13800)).toFixed(0) : 0;
             }
         }
 
         return (
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit} ref={(el) => this.myFormRef = el}>
             {errors.global && (
             <div className="alert alert-danger">{errors.global}</div>
             )}
@@ -103,16 +108,16 @@ class SellForm extends React.Component{
             </FormGroup>
 
             <FormGroup row>
-                <Label for="totalcur" sm={3}>Total {item.symbol}</Label>
+                <Label for="totalget" sm={3}>Total {item.symbol}</Label>
                 <Col sm={9}>
                     <Input 
                         type="text" 
-                        name="totalcur" 
-                        id="totalcur" 
+                        name="totalget" 
+                        id="totalget" 
                         placeholder="" 
                         onChange={this.onChange(totalGet)} />
                 </Col>
-                <div className="invalid-feedback">{errors.totalcur}</div>
+                <div className="invalid-feedback">{errors.totalget}</div>
             </FormGroup>
 
             <FormGroup row>

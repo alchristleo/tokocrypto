@@ -11,7 +11,7 @@ class RegisterForm extends React.Component {
             email: "",
             username: "",
             password: ""
-    },
+        },
         errors: {}
     };
 
@@ -22,7 +22,7 @@ class RegisterForm extends React.Component {
     onChange = e =>
         this.setState({
             data: { ...this.state.data, [e.target.name]: e.target.value }
-    });
+        });
 
     onSubmit = e => {
         e.preventDefault();
@@ -48,63 +48,66 @@ class RegisterForm extends React.Component {
 
         return (
             <form onSubmit={this.onSubmit}>
+                {errors.global && (
+                    <div className="alert alert-danger">{errors.global}</div>
+                )}
                 <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    autoComplete="email"
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={data.email}
-                    onChange={this.onChange}
-                    className={
-                    errors.email ? "form-control is-invalid" : "form-control"
-                    }
-                />
-                <div className="invalid-feedback">{errors.email}</div>
+                    <label htmlFor="email">Email</label>
+                    <input
+                        autoComplete="email"
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={data.email}
+                        onChange={this.onChange}
+                        className={
+                            errors.email ? "form-control is-invalid" : "form-control"
+                        }
+                    />
+                    <div className="invalid-feedback">{errors.email}</div>
                 </div>
 
                 <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input
-                    autoComplete="username"
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={data.username}
-                    onChange={this.onChange}
-                    className={
-                    errors.username ? "form-control is-invalid" : "form-control"
-                    }
-                />
-                <div className="invalid-feedback">{errors.username}</div>
+                    <label htmlFor="username">Username</label>
+                    <input
+                        autoComplete="username"
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={data.username}
+                        onChange={this.onChange}
+                        className={
+                            errors.username ? "form-control is-invalid" : "form-control"
+                        }
+                    />
+                    <div className="invalid-feedback">{errors.username}</div>
                 </div>
 
                 <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                    autoComplete="current-password"
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={data.password}
-                    onChange={this.onChange}
-                    className={
-                    errors.password ? "form-control is-invalid" : "form-control"
-                    }
-                />
-                <div className="invalid-feedback">{errors.password}</div>
+                    <label htmlFor="password">Password</label>
+                    <input
+                        autoComplete="current-password"
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={data.password}
+                        onChange={this.onChange}
+                        className={
+                            errors.password ? "form-control is-invalid" : "form-control"
+                        }
+                    />
+                    <div className="invalid-feedback">{errors.password}</div>
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-block" style={{
                     backgroundColor: "#ff5722",
                     border: "none"
                 }}>
-                Register
+                    Register
                 </button>
 
                 <small className="form-text text-center">
-                or <Link to="/login">Login</Link> if you have an account
+                    or <Link to="/login">Login</Link> if you have an account
                 </small>
             </form>
         );

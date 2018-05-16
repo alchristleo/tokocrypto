@@ -1,4 +1,9 @@
-import { USER_LOGGED_IN, USER_LOGGED_OUT } from '../types';
+import {
+    USER_LOGGED_IN,
+    USER_LOGGED_OUT,
+    LOGIN_REQUEST,
+    LOGIN_FAILURE
+} from '../types';
 import api from '../api';
 import setAuthorizationHeader from '../utils/setAuthorizationHeader';
 
@@ -7,16 +12,19 @@ export const userLoggedIn = user => ({
     user
 });
 
+export const userLoginRequest = user => ({
+    type: LOGIN_REQUEST,
+    user
+});
+
+export const userLoginFailure = errors => ({
+    type: LOGIN_FAILURE,
+    errors
+});
+
 export const userLoggedOut = () => ({
     type: USER_LOGGED_OUT
 });
-
-export const login = credentials => dispatch =>
-    api.user.login(credentials).then(user => {
-        localStorage.tcJWT = user.token;
-        setAuthorizationHeader(user.token);
-        dispatch(userLoggedIn({...user, loaded: true}));
-    });
 
 export const logout = () => dispatch => {
     localStorage.removeItem("tcJWT");

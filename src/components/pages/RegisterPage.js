@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container} from 'reactstrap';
+import { Container } from 'reactstrap';
 import RegisterForm from '../forms/RegisterForm';
 
 const RegisterPage = () => (
