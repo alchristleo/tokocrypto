@@ -1,5 +1,5 @@
-import { normalize } from 'normalizr'; 
-import { CRYPTOS_FETCHED, CRYPTOS_CREATED } from '../types';
+import { normalize } from 'normalizr';
+import { CRYPTOS_FETCHED, CRYPTOS_CREATED, CURRENT_CRYPTO_FETCHED } from '../types';
 import api from '../api';
 import { cryptoSchema } from '../schemas/cryptoSchema';
 
@@ -13,7 +13,12 @@ const cryptoCreated = (data) => ({
 	data
 });
 
-export const fetchCryptos = () => dispatch => 
+const currCryptoFetched = (data) => ({
+	type: CURRENT_CRYPTO_FETCHED,
+	data
+})
+
+export const fetchCryptos = () => dispatch =>
 	api.cryptos.fetchCurrent()
 		.then(cryptos => dispatch(cryptosFetched(normalize(cryptos, [cryptoSchema]))));
 
@@ -21,3 +26,5 @@ export const createCryptos = data => dispatch =>
 	api.cryptos
 		.create(data)
 		.then(crypto => dispatch(cryptoCreated(normalize(crypto, cryptoSchema))));
+
+export const fetchCurrCrypto = data => dispatch => dispatch(currCryptoFetched(data));

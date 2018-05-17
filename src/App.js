@@ -14,9 +14,9 @@ import { fetchCurrentUserRequest } from "./actions/users";
 import TopNavbar from './components/navigation/TopNavbar';
 
 class App extends Component {
-  componentDidMount() {
-    if (this.props.isAuthenticated) this.props.fetchCurrentUserRequest();
-  }
+  // componentDidMount() {
+  //   if (this.props.isAuthenticated) this.props.fetchCurrentUserRequest();
+  // }
 
   render() {
     const { location, isAuthenticated } = this.props;
@@ -40,7 +40,7 @@ App.propTypes = {
     pathname: PropTypes.string.isRequired
   }).isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
-  fetchCurrentUserRequest: PropTypes.func.isRequired,
+  //fetchCurrentUserRequest: PropTypes.func.isRequired,
   //loaded: PropTypes.bool.isRequired
 };
 

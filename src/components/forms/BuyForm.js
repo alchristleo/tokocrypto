@@ -22,7 +22,7 @@ class BuyForm extends React.Component {
         this.state = {
             data: {
                 cryptocur: crSymbol,
-                totalidr: '',
+                totalidr: 0,
                 totalget: '',
                 type: 'buy'
             },
@@ -58,7 +58,7 @@ class BuyForm extends React.Component {
         this.setState({
             data: {
                 cryptocur: crSymbol,
-                totalidr: '',
+                totalidr: 0,
                 totalget: '',
                 type: 'buy'
             }
@@ -86,11 +86,11 @@ class BuyForm extends React.Component {
     }
 
     render() {
-        const { user } = this.props;
+        const { user, currCrypto } = this.props;
         const { cryptos, errors, data } = this.state;
         let totalGet;
         for (let i = 0; i < cryptos.length; i++) {
-            if (cryptos[i].symbol === crSymbol) {
+            if (cryptos[i].symbol === currCrypto.currCrypto) {
                 totalGet = cryptos.length > 0 ? (data.totalidr / (cryptos[i].price_usd * 13800)).toFixed(9) : 0;
             }
         }
@@ -100,7 +100,7 @@ class BuyForm extends React.Component {
                 {errors.global && (
                     <div className="alert alert-danger">{errors.global}</div>
                 )}
-                {cryptos.filter(x => x.symbol === crSymbol).map((item, index) => (
+                {cryptos.filter(x => x.symbol === currCrypto.currCrypto).map((item, index) => (
                     <div>
                         <FormGroup row>
                             <Label for="Balance" sm={3}>Balance: </Label>
@@ -118,7 +118,7 @@ class BuyForm extends React.Component {
                             <Col sm={9}>
                                 <Input
                                     ref={(ref) => this.mainInput = ref}
-                                    type="totalidr"
+                                    type="number"
                                     name="totalidr"
                                     id="totalidr"
                                     placeholder=""
@@ -139,7 +139,7 @@ class BuyForm extends React.Component {
                         </FormGroup>
 
                         <FormGroup row>
-                            <Label for="cryptoGet" sm={3}>Total {crSymbol}: </Label>
+                            <Label for="cryptoGet" sm={3}>Total {currCrypto.currCrypto}: </Label>
                             <Col sm={9}>
                                 <Input type="text" name="totalget" id="totalget" value={totalGet} placeholder="" onChange={this.onChange} />
                             </Col>
@@ -166,6 +166,7 @@ BuyForm.propTypes = {
 function mapStateToProps(state) {
     return {
         user: state.user,
+        currCrypto: state.currCrypto
         //cryptos: state.cryptos
     };
 }
