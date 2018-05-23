@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 import DetailCrypto from '../crypto/DetailCrypto';
 import BuyForm from '../forms/BuyForm';
 import SellForm from '../forms/SellForm';
@@ -9,6 +10,7 @@ import { allCryptosSelector } from "../../reducers/crypto";
 import { fetchCryptos } from '../../actions/cryptos';
 import { createTransactions } from '../../actions/transactions';
 import { subsBalance } from '../../actions/balances';
+
 
 const array = window.location.href.split('market/');
 const crSymbol = array[1];
@@ -46,7 +48,7 @@ class BuySellPage extends React.Component {
 
                     <DetailCrypto transaction={this.state.transaction} />
 
-                    <Row style={{ marginTop: 50 }}>
+                    <Row style={{ marginTop: 30 }}>
                         <Col xs={12} sm={6}>
                             <div className="container">
                                 <div className="row align-items-center">
@@ -85,6 +87,22 @@ class BuySellPage extends React.Component {
                             </div>
                         </Col>
                     </Row>
+                    <div className="row text-center">
+                        <div className="col col-xs-12 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3">
+                            <Link
+                                to="/dashboard"
+                                className="btn btn-primary btn-lg"
+                                style={{
+                                    marginTop: 20,
+                                    backgroundColor: "#ff5722",
+                                    border: "none",
+                                    width: 200
+                                }}
+                            >
+                                Back to Dashboard
+                            </Link>
+                        </div>
+                    </div>
                 </Container>
             </div>
         );

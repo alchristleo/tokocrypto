@@ -1,4 +1,4 @@
-import { normalize } from 'normalizr'; 
+import { normalize } from 'normalizr';
 import { TRANSACTIONS_FETCHED, TRANSACTIONS_CREATED } from '../types';
 import api from '../api';
 import { transactionSchema } from '../schemas/transactionSchema';
@@ -13,7 +13,7 @@ const transactionCreated = (data) => ({
 	data
 });
 
-export const fetchCryptos = () => dispatch => 
+export const fetchTransactions = () => dispatch =>
 	api.transactions.fetchAll()
 		.then(transactions => dispatch(transactionsFetched(normalize(transactions, [transactionSchema]))));
 

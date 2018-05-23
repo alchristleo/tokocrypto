@@ -10,6 +10,7 @@ import LoginPage from './components/pages/LoginPage';
 import RegisterPage from './components/pages/RegisterPage';
 import DashboardPage from './components/pages/DashboardPage';
 import BuySellPage from './components/pages/BuySellPage';
+import ProfilePage from './components/pages/ProfilePage';
 import { fetchCurrentUserRequest } from "./actions/users";
 import TopNavbar from './components/navigation/TopNavbar';
 
@@ -29,6 +30,7 @@ class App extends Component {
         <GuestRoute location={location} path="/register" exact component={RegisterPage} />
         <UserRoute location={location} path="/dashboard" exact component={DashboardPage} />
         <UserRoute location={location} path="/market/:query" exact component={BuySellPage} />
+        <UserRoute location={location} path="/account/history" exact component={ProfilePage} />
 
       </div>
     );

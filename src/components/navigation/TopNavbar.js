@@ -14,7 +14,7 @@ import {
     DropdownItem
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { NavLink as RouterNavLink } from 'react-router-dom';
+import { NavLink as RouterNavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import NumberFormat from 'react-number-format';
 //import gravatarUrl from 'gravatar-url';
@@ -30,7 +30,7 @@ class TopNavbar extends React.Component {
 
     componentDidMount() {
         this.getList();
-        this.timer = setInterval(() => this.getList(), 1000)
+        this.timer = setInterval(() => this.getList(), 300000)
     };
 
     // componentWillReceiveProps(props) {
@@ -103,14 +103,19 @@ class TopNavbar extends React.Component {
                                 <span style={{ marginLeft: 5, color: "white" }}>{user.username}</span>
                             </DropdownToggle>
                             <DropdownMenu right>
-                                <DropdownItem>My Account</DropdownItem>
+                                <DropdownItem><Link
+                                    to="/account/history"
+                                    style={{ color: "#000", textDecoration: "none" }}
+                                >
+                                    My Account
+                            </Link></DropdownItem>
                                 <DropdownItem divider />
                                 <DropdownItem onClick={() => logout()}>Logout</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>
                 </Collapse>
-            </Navbar>
+            </Navbar >
         )
     }
 };

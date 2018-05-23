@@ -99,7 +99,7 @@ class DetailCrypto extends React.Component {
                                 <span style={{ color: "#e6393e" }}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                             </td>
 
-                            <td>{data.totalget ? data.totalget : 0} {item.symbol}</td>
+                            <td>{data.totalget ? (data.totalget).toFixed(8) : 0} {item.symbol}</td>
                         </tr>
                     ))}
                 </tbody>

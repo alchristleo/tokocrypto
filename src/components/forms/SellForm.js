@@ -14,11 +14,11 @@ class SellForm extends React.Component {
     state = {
         data: {
             totalget: this.props.totalget,
-            cyptocur: this.props.cyptocur,
+            cyptocur: this.props.currCrypto.currCrypto,
         },
         data2: {
             totalget: '',
-            cryptocur: crSymbol,
+            cryptocur: this.props.currCrypto.currCrypto,
             totalidr: '',
             type: 'sell'
         },
@@ -35,7 +35,6 @@ class SellForm extends React.Component {
         this.setState({
             data: {
                 totalget: props.transaction.totalget,
-                cryptocur: props.transaction.cryptocur,
             }
         })
     }
@@ -156,7 +155,10 @@ SellForm.propTypes = {
     transaction: PropTypes.shape({
         totalget: PropTypes.number.isRequired,
         cryptocur: PropTypes.string.isRequired,
-    }).isRequired
+    }).isRequired,
+    currCrypto: PropTypes.shape({
+        currCrypto: PropTypes.string.isRequired,
+    }).isRequired,
 };
 
 function mapStateToProps(state) {

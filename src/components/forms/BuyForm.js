@@ -7,9 +7,6 @@ import PropTypes from "prop-types";
 import NumberFormat from 'react-number-format';
 import { subsBalance } from '../../actions/balances';
 
-const array = window.location.href.split('market/');
-const crSymbol = array[1];
-
 const mapDispatchToProps = dispatch => {
     return {
         subsBalance: idr => dispatch(subsBalance(idr))
@@ -21,7 +18,7 @@ class BuyForm extends React.Component {
         super(props);
         this.state = {
             data: {
-                cryptocur: crSymbol,
+                cryptocur: this.props.currCrypto.currCrypto,
                 totalidr: 0,
                 totalget: '',
                 type: 'buy'
@@ -57,7 +54,7 @@ class BuyForm extends React.Component {
         }
         this.setState({
             data: {
-                cryptocur: crSymbol,
+                cryptocur: this.props.currCrypto.currCrypto,
                 totalidr: 0,
                 totalget: '',
                 type: 'buy'
@@ -160,7 +157,10 @@ class BuyForm extends React.Component {
 
 BuyForm.propTypes = {
     submit: PropTypes.func.isRequired,
-    subsBalance: PropTypes.func.isRequired
+    subsBalance: PropTypes.func.isRequired,
+    currCrypto: PropTypes.shape({
+        currCrypto: PropTypes.string.isRequired,
+    }).isRequired,
 };
 
 function mapStateToProps(state) {

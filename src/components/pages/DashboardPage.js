@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Container, Alert } from 'reactstrap';
 import TableCrypto from '../crypto/TableCrypto';
 import { fetchCurrCrypto } from '../../actions/cryptos';
+import { fetchTransactions } from '../../actions/transactions';
 
 class DashboardPage extends React.Component {
     constructor(props) {
@@ -16,6 +17,10 @@ class DashboardPage extends React.Component {
 
         this.onDismiss = this.onDismiss.bind(this);
     }
+
+    componentDidMount = () => this.onInit(this.props);
+
+    onInit = (props) => props.fetchTransactions();
 
     onDismiss() {
         this.setState({ visible: false });
@@ -51,6 +56,7 @@ DashboardPage.propTypes = {
         push: PropTypes.func.isRequired
     }).isRequired,
     fetchCurrCrypto: PropTypes.func.isRequired,
+    fetchTransactions: PropTypes.func.isRequired,
 };
 
-export default connect(null, { fetchCurrCrypto })(DashboardPage);
+export default connect(null, { fetchCurrCrypto, fetchTransactions })(DashboardPage);

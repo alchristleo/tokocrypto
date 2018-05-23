@@ -1,13 +1,20 @@
-h1, h2.card-header, .nav-title{
+.margin20 {
+    margin-top: 20px;
+}
+
+h1, h2.card-header, .nav-title {
     font-family: 'Baumans', cursive;
 }
-.nav-title{
+
+.nav-title {
     font-size: 2em;
     color: white;
 }
-tr:hover{
+
+tr:hover {
     cursor: pointer;
 }
+
 .sort-direction {
     display: inline-block;
     height: 0;
@@ -15,9 +22,26 @@ tr:hover{
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
 }
+
 .sort-direction.asc {
     border-bottom: 5px solid black;
 }
+
 .sort-direction.desc {
     border-top: 5px solid black;
+}
+
+.background-green {
+    background-color: #42b549;
+}
+
+.navItem__hover {
+    cursor: pointer;
+    color: #fff;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    color: #fff;
+    background-color: #ff5722;
+    border-color: #ff5722;
 }
