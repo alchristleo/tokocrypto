@@ -31,7 +31,8 @@ if (localStorage.tcJWT) {
         token: localStorage.tcJWT,
         email: payload.email,
         username: payload.username,
-        balance: payload.balance
+        balance: payload.balance,
+        confirmed: payload.confirmed
     };
     store.dispatch(userLoggedIn(user));
     console.log(store.getState())

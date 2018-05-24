@@ -9,10 +9,6 @@ import FaArrowCircleOUp from 'react-icons/lib/fa/arrow-circle-o-up';
 
 import '../../styles/font.css';
 
-const array = window.location.href.split('market/');
-const crSymbol = array[1];
-
-
 class DetailCrypto extends React.Component {
     state = {
         cryptos: [],
@@ -109,12 +105,15 @@ class DetailCrypto extends React.Component {
 }
 
 DetailCrypto.propTypes = {
+    currCrypto: PropTypes.shape({
+        currCrypto: PropTypes.string.isRequired,
+    }).isRequired,
     transaction: PropTypes.shape({
         totalget: PropTypes.number.isRequired,
         cryptocur: PropTypes.string.isRequired,
         totalidr: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
 };
 
 function mapStateToProps(state) {

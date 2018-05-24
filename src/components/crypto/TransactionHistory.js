@@ -5,16 +5,9 @@ import {
     Nav,
     NavItem,
     NavLink,
-    Card,
-    Button,
-    CardTitle,
-    CardText,
-    Row,
-    Col,
     Container
 } from 'reactstrap';
 import classnames from 'classnames';
-import transactions from '../../reducers/transaction';
 import AllTransactions from '../transactions/AllTransactions';
 import BuyTransactions from '../transactions/BuyTransactions';
 import SellTransactions from '../transactions/SellTransactions';

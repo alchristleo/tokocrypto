@@ -19,13 +19,15 @@ import { connect } from 'react-redux';
 import NumberFormat from 'react-number-format';
 //import gravatarUrl from 'gravatar-url';
 import * as actions from '../../actions/auth';
+import { allTransactionsSelector } from '../../reducers/transaction';
 
 import '../../styles/font.css';
 
 class TopNavbar extends React.Component {
     state = {
         cryptos: [],
-        isOpen: false
+        isOpen: false,
+        balance: 0
     };
 
     componentDidMount() {
@@ -33,9 +35,19 @@ class TopNavbar extends React.Component {
         this.timer = setInterval(() => this.getList(), 300000)
     };
 
-    // componentWillReceiveProps(props) {
-
-    // }
+    componentWillReceiveProps(props) {
+        const taTempBuy = this.props.transactions.filter(item => item.type === 'buy')
+            .map(item => item.totalidr);
+        const tAmountBuy = taTempBuy.reduce(((sum, number) => sum + number), 0);
+        const taTempSell = this.props.transactions.filter(item => item.type === 'sell')
+            .map(item => item.totalidr);
+        const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
+        console.log(taTempBuy); console.log(taTempSell);
+        console.log(tAmountBuy); console.log(tAmountSell);
+        this.setState({
+            balance: this.props.user.balance - (tAmountBuy + tAmountSell)
+        })
+    }
 
     async getList() {
         fetch("/api/cryptos/bitcoin-price")
@@ -47,7 +59,7 @@ class TopNavbar extends React.Component {
 
     render() {
         const { user, logout } = this.props;
-        const { cryptos } = this.state;
+        const { cryptos, balance } = this.state;
 
         return (
             <Navbar expand="sm" style={{
@@ -86,7 +98,7 @@ class TopNavbar extends React.Component {
                         </Button>
                         <Button outline color="success" style={{ marginLeft: 5, backgroundColor: "#28a745", color: "white" }}>
                             Saldo = <NumberFormat
-                                value={user.balance}
+                                value={balance}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 prefix={'IDR '}
@@ -115,7 +127,7 @@ class TopNavbar extends React.Component {
                         </UncontrolledDropdown>
                     </Nav>
                 </Collapse>
-            </Navbar >
+            </Navbar>
         )
     }
 };
@@ -127,12 +139,14 @@ TopNavbar.propTypes = {
         balance: PropTypes.number.isRequired,
     }).isRequired,
     logout: PropTypes.func.isRequired,
+    transactions: PropTypes.arrayOf(PropTypes.shape({
+    }).isRequired).isRequired
 };
 
 function mapStateToProps(state) {
     return {
         user: state.user,
-        //transactions: state.transactions
+        transactions: allTransactionsSelector(state)
     };
 }
 

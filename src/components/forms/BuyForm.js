@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import PropTypes from "prop-types";
 import NumberFormat from 'react-number-format';
 import { subsBalance } from '../../actions/balances';
+import { allTransactionsSelector } from '../../reducers/transaction';
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -23,6 +24,7 @@ class BuyForm extends React.Component {
                 totalget: '',
                 type: 'buy'
             },
+            balance: this.props.user.balance,
             cryptos: [],
             errors: {}
         };
@@ -30,8 +32,21 @@ class BuyForm extends React.Component {
 
     componentDidMount() {
         this.getSelectecCrypto();
-        this.timer = setInterval(() => this.getSelectecCrypto(), 300000)
+        this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
+        setInterval(() => this.getCurrentBalance(), 1000);
     };
+
+    componentWillReceiveProps(props) {
+        const taTempBuy = this.props.transactions.filter(item => item.type === 'buy')
+            .map(item => item.totalidr);
+        const tAmountBuy = taTempBuy.reduce(((sum, number) => sum + number), 0);
+        const taTempSell = this.props.transactions.filter(item => item.type === 'sell')
+            .map(item => item.totalidr);
+        const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
+        this.setState({
+            balance: this.props.user.balance - (tAmountBuy + tAmountSell)
+        })
+    }
 
     onChange = (totalGet) => (e) =>
         this.setState({
@@ -69,6 +84,18 @@ class BuyForm extends React.Component {
             .then(data => this.setState({ cryptos: data.cryptos }))
     }
 
+    getCurrentBalance() {
+        const taTempBuy = this.props.transactions.filter(item => item.type === 'buy')
+            .map(item => item.totalidr);
+        const tAmountBuy = taTempBuy.reduce(((sum, number) => sum + number), 0);
+        const taTempSell = this.props.transactions.filter(item => item.type === 'sell')
+            .map(item => item.totalidr);
+        const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
+        this.setState({
+            balance: this.props.user.balance - (tAmountBuy + tAmountSell)
+        })
+    }
+
     cancelCourse = () => {
         this.myFormRef.reset();
     }
@@ -76,15 +103,15 @@ class BuyForm extends React.Component {
     validate = data => {
         const errors = {};
         const { user } = this.props;
-        if (!data.totalidr) errors.totalidr = alert("IDR input can't be blank!");
-        if (data.totalidr > user.balance) errors.totalidr = alert("Input exceeding user balance!");
-        if (isNaN(data.totalidr)) errors.totalidr = alert("Input must be number");
+        if (!data.totalidr) { alert("IDR input can't be blank!"); }
+        else if (data.totalidr > user.balance) { alert("Input exceeding user balance!"); }
+        else if (isNaN(data.totalidr)) { alert("Input must be number"); }
         return errors;
     }
 
     render() {
         const { user, currCrypto } = this.props;
-        const { cryptos, errors, data } = this.state;
+        const { cryptos, errors, data, balance } = this.state;
         let totalGet;
         for (let i = 0; i < cryptos.length; i++) {
             if (cryptos[i].symbol === currCrypto.currCrypto) {
@@ -98,11 +125,11 @@ class BuyForm extends React.Component {
                     <div className="alert alert-danger">{errors.global}</div>
                 )}
                 {cryptos.filter(x => x.symbol === currCrypto.currCrypto).map((item, index) => (
-                    <div>
+                    <div key={index}>
                         <FormGroup row>
                             <Label for="Balance" sm={3}>Balance: </Label>
                             <Label sm={9}><NumberFormat
-                                value={user.balance}
+                                value={balance}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 prefix={'IDR '}
@@ -161,13 +188,20 @@ BuyForm.propTypes = {
     currCrypto: PropTypes.shape({
         currCrypto: PropTypes.string.isRequired,
     }).isRequired,
+    transactions: PropTypes.arrayOf(PropTypes.shape({
+    }).isRequired).isRequired,
+    user: PropTypes.shape({
+        email: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+        balance: PropTypes.number.isRequired,
+    }).isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         user: state.user,
-        currCrypto: state.currCrypto
-        //cryptos: state.cryptos
+        currCrypto: state.currCrypto,
+        transactions: allTransactionsSelector(state)
     };
 }
 

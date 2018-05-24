@@ -2,10 +2,12 @@ import {
     USER_LOGGED_IN,
     USER_LOGGED_OUT,
     LOGIN_REQUEST,
-    LOGIN_FAILURE
+    LOGIN_FAILURE,
+    // CONFIRM_TOKEN_REQUEST,
+    // CONFIRM_TOKEN_FAILURE
 } from '../types';
-import api from '../api';
 import setAuthorizationHeader from '../utils/setAuthorizationHeader';
+import api from '../api';
 
 export const userLoggedIn = user => ({
     type: USER_LOGGED_IN,
@@ -31,3 +33,19 @@ export const logout = () => dispatch => {
     setAuthorizationHeader();
     dispatch(userLoggedOut());
 };
+
+// export const confirmTokenRequest = token => ({
+//     type: CONFIRM_TOKEN_REQUEST,
+//     token
+// });
+
+// export const confirmTokenFailure = errors => ({
+//     type: CONFIRM_TOKEN_FAILURE,
+//     errors
+// });
+
+export const confirm = token => dispatch =>
+    api.user.confirm(token).then(user => {
+        localStorage.alcphoneJWT = user.token;
+        dispatch(userLoggedIn(user));
+    });

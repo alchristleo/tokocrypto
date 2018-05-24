@@ -8,18 +8,17 @@ import NumberFormat from 'react-number-format';
 
 const array = window.location.href.split('market/');
 const crSymbol = array[1];
-let currVal; let currInput;
 
 class SellForm extends React.Component {
     state = {
         data: {
-            totalget: this.props.totalget,
+            totalget: 0,
             cyptocur: this.props.currCrypto.currCrypto,
         },
         data2: {
             totalget: '',
             cryptocur: this.props.currCrypto.currCrypto,
-            totalidr: '',
+            totalidr: 0,
             type: 'sell'
         },
         cryptos: [],
@@ -41,7 +40,7 @@ class SellForm extends React.Component {
 
     onChange = (totalGet) => (e) =>
         this.setState({
-            data2: { ...this.state.data2, totalidr: totalGet * 10, [e.target.name]: e.target.value }
+            data2: { ...this.state.data2, totalidr: totalGet, [e.target.name]: e.target.value }
         });
 
     onSubmit = (e) => {
@@ -72,14 +71,14 @@ class SellForm extends React.Component {
     }
 
     cancelCourse = () => {
-        this.myFormRef.reset();
+        this.myFormRefB.reset();
     }
 
     validate = data2 => {
         const errors = {};
-        if (currVal === 0) { errors.totalcur = `You dont have enough ${crSymbol} balance`; alert(`Your dont enough ${crSymbol} balance`); }
-        if (currInput === 0) { errors.totalcur = "IDR input can't be blank!"; alert("IDR input can't be blank!"); }
-        if (currInput > currVal) { errors.totalcur = `${crSymbol} input can't be greater than user ${crSymbol} balance `; alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `); }
+        if (this.state.data.totalget === 0) { alert(`Your dont have enough ${crSymbol} balance`); }
+        else if (data2.totalget === 0) { alert("IDR input can't be blank!"); }
+        else if (data2.totalget > this.state.data.totalget) { alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `); }
         return errors;
     }
 
@@ -87,8 +86,6 @@ class SellForm extends React.Component {
         const { currCrypto } = this.props;
         const { cryptos, data, data2, errors } = this.state;
         let totalGet;
-        currVal = data.totalget;
-        currInput = data2.totalget;
         for (let i = 0; i < cryptos.length; i++) {
             if (cryptos[i].symbol === currCrypto.currCrypto) {
                 totalGet = cryptos.length > 0 ? (data2.totalget * (cryptos[i].price_usd * 13800)).toFixed(0) : 0;
@@ -96,12 +93,12 @@ class SellForm extends React.Component {
         }
 
         return (
-            <form onSubmit={this.onSubmit} ref={(el) => this.myFormRef = el}>
+            <form onSubmit={this.onSubmit} ref={(al) => this.myFormRefB = al}>
                 {errors.global && (
                     <div className="alert alert-danger">{errors.global}</div>
                 )}
-                {cryptos.filter(x => x.symbol === currCrypto.currCrypto).map(item => (
-                    <div>
+                {cryptos.filter(x => x.symbol === currCrypto.currCrypto).map((item, index) => (
+                    <div key={index}>
                         <FormGroup row>
                             <Label for="Balance" sm={3}>Balance: </Label>
                             <Label sm={9}>{data.totalget ? (data.totalget).toFixed(8) : 0} {item.symbol}</Label>
@@ -111,10 +108,11 @@ class SellForm extends React.Component {
                             <Label for="totalget" sm={3}>Total {item.symbol}</Label>
                             <Col sm={9}>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     name="totalget"
                                     id="totalget"
                                     placeholder=""
+                                    step="any"
                                     onChange={this.onChange(totalGet)} />
                             </Col>
                             <div className="invalid-feedback">{errors.totalget}</div>

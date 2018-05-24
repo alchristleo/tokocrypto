@@ -8,6 +8,7 @@ import GuestRoute from './components/routes/GuestRoute';
 import HomePage from './components/pages/HomePage';
 import LoginPage from './components/pages/LoginPage';
 import RegisterPage from './components/pages/RegisterPage';
+import ConfirmationPage from './components/pages/ConfirmationPage';
 import DashboardPage from './components/pages/DashboardPage';
 import BuySellPage from './components/pages/BuySellPage';
 import ProfilePage from './components/pages/ProfilePage';
@@ -26,6 +27,7 @@ class App extends Component {
 
         {isAuthenticated && <TopNavbar />}
         <Route location={location} path="/" exact component={HomePage} />
+        <Route location={location} path="/confirmation/:token" exact component={ConfirmationPage} />
         <GuestRoute location={location} path="/login" exact component={LoginPage} />
         <GuestRoute location={location} path="/register" exact component={RegisterPage} />
         <UserRoute location={location} path="/dashboard" exact component={DashboardPage} />

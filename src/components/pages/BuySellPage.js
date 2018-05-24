@@ -39,7 +39,7 @@ class BuySellPage extends React.Component {
             .then(() => this.props.history.push(path))
 
     render() {
-        const { cryptos, currCrypto } = this.props;
+        const { currCrypto } = this.props;
 
         return (
             <div>
