@@ -5,9 +5,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from "prop-types";
 import NumberFormat from 'react-number-format';
-
-const array = window.location.href.split('market/');
-const crSymbol = array[1];
+import { allTransactionsSelector } from '../../reducers/transaction';
 
 class SellForm extends React.Component {
     state = {
@@ -22,21 +20,15 @@ class SellForm extends React.Component {
             type: 'sell'
         },
         cryptos: [],
-        errors: {}
+        errors: {},
+        currCryptoBalance: 0
     };
 
     componentDidMount() {
         this.getSelectecCrypto();
-        this.timer = setInterval(() => this.getSelectecCrypto(), 300000)
+        this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
+        setInterval(() => this.getCurrentCryptoBalance(), 0);
     };
-
-    componentWillReceiveProps(props) {
-        this.setState({
-            data: {
-                totalget: props.transaction.totalget,
-            }
-        })
-    }
 
     onChange = (totalGet) => (e) =>
         this.setState({
@@ -46,14 +38,7 @@ class SellForm extends React.Component {
     onSubmit = (e) => {
         e.preventDefault();
         const errors = this.validate(this.state.data2);
-        // this.setState({data2: {
-        //     totalcur: currVal,
-        //     cryptocur: crSymbol,
-        //     totalidr: totalGet,
-        //     type: 'sell'
-        // }});
         this.setState({ errors });
-        console.log(this.state.data2);
         if (Object.keys(errors).length === 0) {
             this.props
                 .submit2(this.state.data2)
@@ -61,7 +46,7 @@ class SellForm extends React.Component {
                     this.setState({ errors: err.response.data.errors })
                 );
         }
-        this.cancelCourse();
+        this.cancelCourse2();
     }
 
     async getSelectecCrypto() {
@@ -70,21 +55,45 @@ class SellForm extends React.Component {
             .then(data => this.setState({ cryptos: data.cryptos }))
     }
 
-    cancelCourse = () => {
+    getCurrentCryptoBalance() {
+        const taTempBuy = this.props.transactions.filter(item => item.type === 'buy' && item.cryptocur === this.props.currCrypto.currCrypto)
+            .map(item => item.totalget);
+        const tAmountBuy = taTempBuy.reduce(((sum, number) => sum + number), 0);
+        const taTempSell = this.props.transactions.filter(item => item.type === 'sell' && item.cryptocur === this.props.currCrypto.currCrypto)
+            .map(item => item.totalget);
+        const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
+        this.setState({
+            currCryptoBalance: tAmountBuy - tAmountSell
+        })
+    }
+
+    cancelCourse2 = () => {
         this.myFormRefB.reset();
+        this.setState({
+            data2: {
+                totalget: 0
+            }
+        })
     }
 
     validate = data2 => {
         const errors = {};
-        if (this.state.data.totalget === 0) { alert(`Your dont have enough ${crSymbol} balance`); }
-        else if (data2.totalget === 0) { alert("IDR input can't be blank!"); }
-        else if (data2.totalget > this.state.data.totalget) { alert(`${crSymbol} input can't be greater than user ${crSymbol} balance `); }
+        if (this.state.currCryptoBalance === 0) {
+            errors.totalget = `You dont have enough ${this.props.currCrypto.currCrypto} balance`;
+            alert(`Your dont have enough ${this.props.currCrypto.currCrypto} balance`);
+        } else if (data2.totalget === 0) {
+            errors.totalget = "IDR input can't be blank!";
+            alert("IDR input can't be blank!");
+        } else if (data2.totalget > this.state.currCryptoBalance) {
+            errors.totalget = `${this.props.currCrypto.currCrypto} input can't be greater than user ${this.props.currCrypto.currCrypto} balance `;
+            alert(`${this.props.currCrypto.currCrypto} input can't be greater than user ${this.props.currCrypto.currCrypto} balance `);
+        }
         return errors;
     }
 
     render() {
         const { currCrypto } = this.props;
-        const { cryptos, data, data2, errors } = this.state;
+        const { cryptos, data2, errors, currCryptoBalance } = this.state;
         let totalGet;
         for (let i = 0; i < cryptos.length; i++) {
             if (cryptos[i].symbol === currCrypto.currCrypto) {
@@ -101,7 +110,7 @@ class SellForm extends React.Component {
                     <div key={index}>
                         <FormGroup row>
                             <Label for="Balance" sm={3}>Balance: </Label>
-                            <Label sm={9}>{data.totalget ? (data.totalget).toFixed(8) : 0} {item.symbol}</Label>
+                            <Label sm={9}>{currCryptoBalance ? (currCryptoBalance).toFixed(8) : 0} {item.symbol}</Label>
                         </FormGroup>
 
                         <FormGroup row>
@@ -150,20 +159,18 @@ class SellForm extends React.Component {
 
 SellForm.propTypes = {
     submit2: PropTypes.func.isRequired,
-    transaction: PropTypes.shape({
-        totalget: PropTypes.number.isRequired,
-        cryptocur: PropTypes.string.isRequired,
-    }).isRequired,
     currCrypto: PropTypes.shape({
         currCrypto: PropTypes.string.isRequired,
     }).isRequired,
+    transactions: PropTypes.arrayOf(PropTypes.shape({
+    }).isRequired).isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         user: state.user,
-        currCrypto: state.currCrypto
-        //cryptos: state.cryptos
+        currCrypto: state.currCrypto,
+        transactions: allTransactionsSelector(state)
     };
 }
 

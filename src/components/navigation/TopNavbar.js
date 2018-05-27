@@ -32,7 +32,8 @@ class TopNavbar extends React.Component {
 
     componentDidMount() {
         this.getList();
-        this.timer = setInterval(() => this.getList(), 300000)
+        this.timer = setInterval(() => this.getList(), 300000);
+        setInterval(() => this.getCurrentBalance(), 0);
     };
 
     componentWillReceiveProps(props) {
@@ -42,10 +43,8 @@ class TopNavbar extends React.Component {
         const taTempSell = this.props.transactions.filter(item => item.type === 'sell')
             .map(item => item.totalidr);
         const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
-        console.log(taTempBuy); console.log(taTempSell);
-        console.log(tAmountBuy); console.log(tAmountSell);
         this.setState({
-            balance: this.props.user.balance - (tAmountBuy + tAmountSell)
+            balance: this.props.user.balance - (tAmountBuy - tAmountSell)
         })
     }
 
@@ -53,6 +52,18 @@ class TopNavbar extends React.Component {
         fetch("/api/cryptos/bitcoin-price")
             .then(response => response.json())
             .then(data => this.setState({ cryptos: data.cryptos }))
+    }
+
+    getCurrentBalance() {
+        const taTempBuy = this.props.transactions.filter(item => item.type === 'buy')
+            .map(item => item.totalidr);
+        const tAmountBuy = taTempBuy.reduce(((sum, number) => sum + number), 0);
+        const taTempSell = this.props.transactions.filter(item => item.type === 'sell')
+            .map(item => item.totalidr);
+        const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
+        this.setState({
+            balance: this.props.user.balance - (tAmountBuy - tAmountSell)
+        })
     }
 
     toggle = () => this.setState({ isOpen: !this.state.isOpen });

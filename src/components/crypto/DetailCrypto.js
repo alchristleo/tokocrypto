@@ -1,11 +1,10 @@
 import React from 'react';
-//import axios from 'axios';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Table } from 'reactstrap';
 import NumberFormat from 'react-number-format';
 import FaArrowCircleODown from 'react-icons/lib/fa/arrow-circle-o-down';
 import FaArrowCircleOUp from 'react-icons/lib/fa/arrow-circle-o-up';
+import { allTransactionsSelector } from '../../reducers/transaction';
 
 import '../../styles/font.css';
 
@@ -17,39 +16,36 @@ class DetailCrypto extends React.Component {
             cyptocur: this.props.cyptocur,
             totalidr: this.props.totalidr,
             type: this.props.type
-        }
+        },
+        currCryptoBalance: 0
     }
 
     componentDidMount() {
         this.getSelectecCrypto();
-        this.timer = setInterval(() => this.getSelectecCrypto(), 300000)
+        this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
+        setInterval(() => this.getCurrentCryptoBalance(), 0);
     };
-
-    componentWillReceiveProps(props) {
-        // this.setState({transactions: {
-        //     totalget: '0.54321898',
-        //     cryptocur: crSymbol,
-        //     totalidr: '5000000'
-        // }});
-        this.setState({
-            data: {
-                totalget: props.transaction.totalget,
-                cryptocur: props.transaction.cryptocur,
-                totalidr: props.transaction.totalidr,
-                type: props.transaction.type
-            }
-        })
-    }
 
     async getSelectecCrypto() {
         fetch("/api/cryptos/current-crypto")
             .then(response => response.json())
-            //.then(data => console.log(data))
             .then(data => this.setState({ cryptos: data.cryptos }))
     }
 
+    getCurrentCryptoBalance() {
+        const taTempBuy = this.props.transactions.filter(item => item.type === 'buy' && item.cryptocur === this.props.currCrypto.currCrypto)
+            .map(item => item.totalget);
+        const tAmountBuy = taTempBuy.reduce(((sum, number) => sum + number), 0);
+        const taTempSell = this.props.transactions.filter(item => item.type === 'sell' && item.cryptocur === this.props.currCrypto.currCrypto)
+            .map(item => item.totalget);
+        const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
+        this.setState({
+            currCryptoBalance: tAmountBuy - tAmountSell
+        })
+    }
+
     render() {
-        const { cryptos, data } = this.state;
+        const { cryptos, currCryptoBalance } = this.state;
         const { currCrypto } = this.props;
         //console.log(this.props.transactions);
         //let totalGet;
@@ -95,7 +91,7 @@ class DetailCrypto extends React.Component {
                                 <span style={{ color: "#e6393e" }}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                             </td>
 
-                            <td>{data.totalget ? (data.totalget).toFixed(8) : 0} {item.symbol}</td>
+                            <td>{currCryptoBalance ? (currCryptoBalance).toFixed(8) : 0} {item.symbol}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -104,22 +100,11 @@ class DetailCrypto extends React.Component {
     }
 }
 
-DetailCrypto.propTypes = {
-    currCrypto: PropTypes.shape({
-        currCrypto: PropTypes.string.isRequired,
-    }).isRequired,
-    transaction: PropTypes.shape({
-        totalget: PropTypes.number.isRequired,
-        cryptocur: PropTypes.string.isRequired,
-        totalidr: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired
-    }).isRequired,
-};
-
 function mapStateToProps(state) {
     return {
         user: state.user,
-        currCrypto: state.currCrypto
+        currCrypto: state.currCrypto,
+        transactions: allTransactionsSelector(state)
     };
 }
 

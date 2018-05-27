@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Route, Router} from 'react-router-dom';
+import { Route, Router } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.css";
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -35,18 +35,13 @@ if (localStorage.tcJWT) {
         confirmed: payload.confirmed
     };
     store.dispatch(userLoggedIn(user));
-    console.log(store.getState())
-    //store.dispatch(fetchCurrentUserRequest());
-} 
-// else {
-//     store.dispatch(fetchCurrentUserSuccess({}));
-// }
+}
 
 ReactDOM.render(
     <Router history={history}>
         <Provider store={store}>
             <Route component={App} />
         </Provider>
-    </Router>, 
+    </Router>,
     document.getElementById('root'));
 registerServiceWorker();

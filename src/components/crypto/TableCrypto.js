@@ -6,20 +6,18 @@ import { Table } from 'reactstrap';
 import NumberFormat from 'react-number-format';
 import FaArrowCircleODown from 'react-icons/lib/fa/arrow-circle-o-down';
 import FaArrowCircleOUp from 'react-icons/lib/fa/arrow-circle-o-up';
-
+import { allTransactionsSelector } from '../../reducers/transaction';
 import '../../styles/font.css';
 
 class TableCrypto extends React.Component {
     constructor(props) {
         super(props);
-        //this.onClick = this.onClick.bind(this);
         this.state = {
             cryptos: [],
             sort: {
                 column: null,
                 direction: 'desc',
             },
-            crClick: '',
         }
     }
 
@@ -93,14 +91,50 @@ class TableCrypto extends React.Component {
         return className;
     };
 
-    // handleClickEvent = (value) => (e) => {
-    //     e.preventDefault();
-    //     this.setState({ crClick: value });
-    //     console.log(this.state.crClick);
-    //     //this.props.submit(this.state.crClick);
-    // }
-
     render() {
+        const array = [];
+        var tempBuy = [];
+
+        const { transactions } = this.props;
+        this.state.cryptos.map(item => {
+            return array.push(transactions.filter(x => x.cryptocur === item.symbol))
+        });
+        //LOOPING TRANSACTION ON EACH ARRAY CRYPTO
+
+        for (let i = 0; i < array.length; i++) {
+            //CHECK IF CURRENT CRYPTO ARRAY LENGTH > 0
+            if (array[i].length > 0) {
+                let aa = []; let cc = [];
+                let bb = 0; let dd = 0; let ee = 0;
+                //LOOPING ARRAY OF TRANSACTION ON ARRAY CRYPTO [i]
+                for (let j = 0; j < array[i].length; j++) {
+                    //console.log(array[i][j]);
+                    //CHECK IF THE TYPE OF TRANSACTION IS BUY
+                    if ((array[i][j].type === 'buy')) {
+
+                        aa.push(array[i][j].totalget);
+                        //LOOPING NEW ARRAY OF TOTALGET OF TYPE BUY
+                        for (let zz = 0; zz < aa.length; zz++) {
+                            bb = aa.reduce(((sum, num) => sum + num), 0);
+                        }
+                    } else if ((array[i][j].type === 'sell')) {
+                        cc.push(array[i][j].totalget);
+                        //LOOPING NEW ARRAY OF TOTALGET OF TYPE BUY
+                        for (let vv = 0; vv < cc.length; vv++) {
+                            dd = cc.reduce(((sum, num) => sum + num), 0);
+                        }
+                    } else {
+
+                    }
+                    ee = (bb - dd).toFixed(8);
+
+                }
+                tempBuy.push({ cryptoAsset: array[i][0].cryptocur, assetValue: ee });
+            } else {
+                // return "0";
+            }
+        }
+
         var tables = this.state.cryptos.map(function (item, index) {
             return (
                 <tr key={item.id} id={item.id} value={item.symbol} onClick={() => this.props.submit(item.symbol)}>
@@ -126,7 +160,17 @@ class TableCrypto extends React.Component {
                         <span style={{ color: "#15E100" }}><FaArrowCircleOUp /> {item.percent_change_24h}%</span> :
                         <span style={{ color: "#e6393e" }}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                     </td>
-                    <td>0 {item.symbol}</td>
+                    <td>
+                        {(tempBuy.filter(tb => tb.cryptoAsset === item.symbol)).length > 0 ?
+                            tempBuy.filter(tb => tb.cryptoAsset === item.symbol).map(tbx => {
+                                if (tbx) {
+                                    return tbx.assetValue;
+                                }
+                            }) : "0"
+                        }
+                        {' '}
+                        <span style={{ fontWeight: 500 }}>{item.symbol}</span>
+                    </td>
                 </tr>
             );
         }.bind(this)
@@ -157,7 +201,15 @@ TableCrypto.propTypes = {
     // history: PropTypes.shape({
     //     push: PropTypes.func.isRequired
     // }).isRequired
-    submit: PropTypes.func.isRequired
+    submit: PropTypes.func.isRequired,
+    transactions: PropTypes.arrayOf(PropTypes.shape({
+    }).isRequired).isRequired,
 };
 
-export default connect(null, {})(TableCrypto);
+function mapStateToProps(state) {
+    return {
+        transactions: allTransactionsSelector(state)
+    };
+}
+
+export default connect(mapStateToProps, {})(TableCrypto);

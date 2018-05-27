@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Alert } from 'reactstrap';
 import TableCrypto from '../crypto/TableCrypto';
-import { fetchCurrCrypto } from '../../actions/cryptos';
+import { fetchCurrCrypto, fetchCryptos } from '../../actions/cryptos';
 import { fetchTransactions } from '../../actions/transactions';
+import { allCryptosSelector } from "../../reducers/crypto";
 
 class DashboardPage extends React.Component {
     constructor(props) {
@@ -18,9 +19,13 @@ class DashboardPage extends React.Component {
         this.onDismiss = this.onDismiss.bind(this);
     }
 
-    componentDidMount = () => this.onInit(this.props);
+    componentDidMount = () => {
+        this.onInit(this.props);
+        this.onInitCryptos(this.props);
+    }
 
     onInit = (props) => props.fetchTransactions();
+    onInitCryptos = (props) => props.fetchCryptos();
 
     onDismiss() {
         this.setState({ visible: false });
@@ -66,12 +71,16 @@ DashboardPage.propTypes = {
     }).isRequired,
     fetchCurrCrypto: PropTypes.func.isRequired,
     fetchTransactions: PropTypes.func.isRequired,
+    cryptos: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string.isRequired
+    }).isRequired).isRequired,
 };
 
 function mapStateToProps(state) {
     return {
+        cryptos: allCryptosSelector(state),
         isConfirmed: !!state.user.confirmed
     }
 }
 
-export default connect(mapStateToProps, { fetchCurrCrypto, fetchTransactions })(DashboardPage);
+export default connect(mapStateToProps, { fetchCryptos, fetchCurrCrypto, fetchTransactions })(DashboardPage);

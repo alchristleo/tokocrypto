@@ -9,13 +9,6 @@ import SellForm from '../forms/SellForm';
 import { allCryptosSelector } from "../../reducers/crypto";
 import { fetchCryptos } from '../../actions/cryptos';
 import { createTransactions } from '../../actions/transactions';
-import { subsBalance } from '../../actions/balances';
-
-
-const array = window.location.href.split('market/');
-const crSymbol = array[1];
-const path = `/market/${crSymbol}`;
-//console.log(path);
 
 class BuySellPage extends React.Component {
     state = {
@@ -30,13 +23,10 @@ class BuySellPage extends React.Component {
 
     addTransactions = (transaction) =>
         this.props.createTransactions(transaction)
-            //.subsBalance(transaction.totalidr)
-            .then(() => this.props.history.push(path))
             .then(this.setState({ transaction: transaction }));
 
     addTransactions2 = (transaction) =>
         this.props.createTransactions(transaction)
-            .then(() => this.props.history.push(path))
 
     render() {
         const { currCrypto } = this.props;
@@ -111,7 +101,6 @@ class BuySellPage extends React.Component {
 
 BuySellPage.propTypes = {
     createTransactions: PropTypes.func.isRequired,
-    //subsBalance: PropTypes.func.isRequired,
     fetchCryptos: PropTypes.func.isRequired,
     cryptos: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string.isRequired
@@ -128,4 +117,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { fetchCryptos, createTransactions, subsBalance })(BuySellPage);
+export default connect(mapStateToProps, { fetchCryptos, createTransactions })(BuySellPage);

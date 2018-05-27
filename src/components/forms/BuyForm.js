@@ -24,7 +24,7 @@ class BuyForm extends React.Component {
                 totalget: '',
                 type: 'buy'
             },
-            balance: this.props.user.balance,
+            balance: 0,
             cryptos: [],
             errors: {}
         };
@@ -33,7 +33,7 @@ class BuyForm extends React.Component {
     componentDidMount() {
         this.getSelectecCrypto();
         this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
-        setInterval(() => this.getCurrentBalance(), 1000);
+        setInterval(() => this.getCurrentBalance(), 0);
     };
 
     componentWillReceiveProps(props) {
@@ -44,7 +44,7 @@ class BuyForm extends React.Component {
             .map(item => item.totalidr);
         const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
         this.setState({
-            balance: this.props.user.balance - (tAmountBuy + tAmountSell)
+            balance: this.props.user.balance - (tAmountBuy - tAmountSell)
         })
     }
 
@@ -56,7 +56,6 @@ class BuyForm extends React.Component {
     onSubmit = (e) => {
         e.preventDefault();
         const errors = this.validate(this.state.data);
-        console.log(this.state.data);
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
             this.props
@@ -92,7 +91,7 @@ class BuyForm extends React.Component {
             .map(item => item.totalidr);
         const tAmountSell = taTempSell.reduce(((sum, number) => sum + number), 0);
         this.setState({
-            balance: this.props.user.balance - (tAmountBuy + tAmountSell)
+            balance: this.props.user.balance - (tAmountBuy - tAmountSell)
         })
     }
 
@@ -102,15 +101,21 @@ class BuyForm extends React.Component {
 
     validate = data => {
         const errors = {};
-        const { user } = this.props;
-        if (!data.totalidr) { alert("IDR input can't be blank!"); }
-        else if (data.totalidr > user.balance) { alert("Input exceeding user balance!"); }
-        else if (isNaN(data.totalidr)) { alert("Input must be number"); }
+        if (!data.totalidr) {
+            errors.idr = "IDR input can't be blank!";
+            alert("IDR input can't be blank!");
+        } else if (data.totalidr > this.state.balance) {
+            errors.idr = "Input exceeding user balance!";
+            alert("Input exceeding user balance!");
+        } else if (isNaN(data.totalidr)) {
+            errors.idr = "Input must be number!";
+            alert("Input must be number");
+        }
         return errors;
     }
 
     render() {
-        const { user, currCrypto } = this.props;
+        const { currCrypto } = this.props;
         const { cryptos, errors, data, balance } = this.state;
         let totalGet;
         for (let i = 0; i < cryptos.length; i++) {
