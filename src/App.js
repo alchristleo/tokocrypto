@@ -16,9 +16,6 @@ import { fetchCurrentUserRequest } from "./actions/users";
 import TopNavbar from './components/navigation/TopNavbar';
 
 class App extends Component {
-  // componentDidMount() {
-  //   if (this.props.isAuthenticated) this.props.fetchCurrentUserRequest();
-  // }
 
   render() {
     const { location, isAuthenticated } = this.props;

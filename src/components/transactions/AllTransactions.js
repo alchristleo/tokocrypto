@@ -16,7 +16,6 @@ class AllTransactions extends React.Component {
 
     render() {
         const { transactions } = this.state;
-
         var list = transactions.map(function (items, index) {
             return (
                 <tr key={index}>

@@ -20,5 +20,5 @@ export default {
     transactions: {
         fetchAll: () => axios.get('/api/transactions').then(res => res.data.transactions),
         create: transaction => axios.post('/api/transactions', { transaction }).then(res => res.data.transaction)
-    }
+    },
 }

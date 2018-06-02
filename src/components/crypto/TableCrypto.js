@@ -1,5 +1,4 @@
 import React from 'react';
-//import axios from 'axios';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Table } from 'reactstrap';
@@ -18,12 +17,14 @@ class TableCrypto extends React.Component {
                 column: null,
                 direction: 'desc',
             },
+            kurs: 0
         }
     }
 
     componentDidMount() {
         this.getList();
         this.timer = setInterval(() => this.getList(), 300000)
+        this.getKurs();
     };
 
     onSort = (column) => (e) => {
@@ -81,6 +82,12 @@ class TableCrypto extends React.Component {
             .then(data => this.setState({ cryptos: data.cryptos }))
     }
 
+    async getKurs() {
+        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
+            .then(response => response.json())
+            .then(data => this.setState({ kurs: data.USD_IDR.val }));
+    }
+
     setArrow = (column) => {
         let className = 'sort-direction';
 
@@ -94,9 +101,9 @@ class TableCrypto extends React.Component {
     render() {
         const array = [];
         var tempBuy = [];
-
+        const { cryptos, kurs } = this.state;
         const { transactions } = this.props;
-        this.state.cryptos.map(item => {
+        cryptos.map(item => {
             return array.push(transactions.filter(x => x.cryptocur === item.symbol))
         });
         //LOOPING TRANSACTION ON EACH ARRAY CRYPTO
@@ -124,7 +131,7 @@ class TableCrypto extends React.Component {
                             dd = cc.reduce(((sum, num) => sum + num), 0);
                         }
                     } else {
-
+                        return;
                     }
                     ee = (bb - dd).toFixed(8);
 
@@ -143,7 +150,7 @@ class TableCrypto extends React.Component {
                     <td>{item.symbol}/IDR</td>
                     <td>{item.name}</td>
                     <td><NumberFormat
-                        value={item.price_usd * 13800}
+                        value={item.price_usd * kurs}
                         displayType={'text'}
                         thousandSeparator={true}
                         prefix={'IDR '}
@@ -198,9 +205,6 @@ class TableCrypto extends React.Component {
 }
 
 TableCrypto.propTypes = {
-    // history: PropTypes.shape({
-    //     push: PropTypes.func.isRequired
-    // }).isRequired
     submit: PropTypes.func.isRequired,
     transactions: PropTypes.arrayOf(PropTypes.shape({
     }).isRequired).isRequired,

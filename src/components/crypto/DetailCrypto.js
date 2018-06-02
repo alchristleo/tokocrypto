@@ -5,7 +5,6 @@ import NumberFormat from 'react-number-format';
 import FaArrowCircleODown from 'react-icons/lib/fa/arrow-circle-o-down';
 import FaArrowCircleOUp from 'react-icons/lib/fa/arrow-circle-o-up';
 import { allTransactionsSelector } from '../../reducers/transaction';
-
 import '../../styles/font.css';
 
 class DetailCrypto extends React.Component {
@@ -17,19 +16,27 @@ class DetailCrypto extends React.Component {
             totalidr: this.props.totalidr,
             type: this.props.type
         },
-        currCryptoBalance: 0
+        currCryptoBalance: 0,
+        kurs: 0
     }
 
     componentDidMount() {
         this.getSelectecCrypto();
         this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
         setInterval(() => this.getCurrentCryptoBalance(), 0);
+        this.getKurs();
     };
 
     async getSelectecCrypto() {
         fetch("/api/cryptos/current-crypto")
             .then(response => response.json())
             .then(data => this.setState({ cryptos: data.cryptos }))
+    }
+
+    async getKurs() {
+        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
+            .then(response => response.json())
+            .then(data => this.setState({ kurs: data.USD_IDR.val }));
     }
 
     getCurrentCryptoBalance() {
@@ -45,15 +52,8 @@ class DetailCrypto extends React.Component {
     }
 
     render() {
-        const { cryptos, currCryptoBalance } = this.state;
+        const { cryptos, currCryptoBalance, kurs } = this.state;
         const { currCrypto } = this.props;
-        //console.log(this.props.transactions);
-        //let totalGet;
-        // for(let i = 0; i< transactions.length; i++){
-        //     if(transactions[i].cryptocur === crSymbol){
-        //         totalGet = transactions.length > 0 ? transactions[i].totalget : 0;
-        //     }
-        // }
 
         return (
             <Table bordered hover size="sm">
@@ -73,7 +73,7 @@ class DetailCrypto extends React.Component {
                             <th scope="row">{item.symbol}/IDR</th>
                             <td>{item.name}</td>
                             <td><NumberFormat
-                                value={item.price_usd * 13800}
+                                value={item.price_usd * kurs}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 prefix={'IDR '}
@@ -91,7 +91,7 @@ class DetailCrypto extends React.Component {
                                 <span style={{ color: "#e6393e" }}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                             </td>
 
-                            <td>{currCryptoBalance ? (currCryptoBalance).toFixed(8) : 0} {item.symbol}</td>
+                            <td>{currCryptoBalance ? (currCryptoBalance).toFixed(8) : 0} <span style={{ fontWeight: 500 }}>{item.symbol}</span></td>
                         </tr>
                     ))}
                 </tbody>

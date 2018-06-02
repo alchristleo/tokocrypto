@@ -26,7 +26,8 @@ class BuyForm extends React.Component {
             },
             balance: 0,
             cryptos: [],
-            errors: {}
+            errors: {},
+            kurs: 0
         };
     };
 
@@ -34,6 +35,7 @@ class BuyForm extends React.Component {
         this.getSelectecCrypto();
         this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
         setInterval(() => this.getCurrentBalance(), 0);
+        this.getKurs();
     };
 
     componentWillReceiveProps(props) {
@@ -83,6 +85,12 @@ class BuyForm extends React.Component {
             .then(data => this.setState({ cryptos: data.cryptos }))
     }
 
+    async getKurs() {
+        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
+            .then(response => response.json())
+            .then(data => this.setState({ kurs: data.USD_IDR.val }));
+    }
+
     getCurrentBalance() {
         const taTempBuy = this.props.transactions.filter(item => item.type === 'buy')
             .map(item => item.totalidr);
@@ -116,11 +124,11 @@ class BuyForm extends React.Component {
 
     render() {
         const { currCrypto } = this.props;
-        const { cryptos, errors, data, balance } = this.state;
+        const { cryptos, errors, data, balance, kurs } = this.state;
         let totalGet;
         for (let i = 0; i < cryptos.length; i++) {
             if (cryptos[i].symbol === currCrypto.currCrypto) {
-                totalGet = cryptos.length > 0 ? (data.totalidr / (cryptos[i].price_usd * 13800)).toFixed(9) : 0;
+                totalGet = cryptos.length > 0 ? (data.totalidr / (cryptos[i].price_usd * kurs)).toFixed(9) : 0;
             }
         }
 
@@ -159,7 +167,7 @@ class BuyForm extends React.Component {
                         <FormGroup row>
                             <Label for="price" sm={3}>Price</Label>
                             <Label sm={9}><NumberFormat
-                                value={item.price_usd * 13800}
+                                value={item.price_usd * kurs}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 prefix={'IDR '}
@@ -172,7 +180,6 @@ class BuyForm extends React.Component {
                             <Col sm={9}>
                                 <Input type="text" name="totalget" id="totalget" value={totalGet} placeholder="" onChange={this.onChange} />
                             </Col>
-                            {/* <Label name="totalget" id="totalget" sm={9} value={data.totalidr / (item.price_usd * 13800)}>{data.totalidr / (item.price_usd * 13800)} {crSymbol}</Label> */}
                         </FormGroup>
                     </div>
                 ))}
