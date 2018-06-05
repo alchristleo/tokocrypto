@@ -3,6 +3,10 @@ import {
     USER_LOGGED_OUT,
     LOGIN_REQUEST,
     LOGIN_FAILURE,
+    FORGOT_PASSWORD_REQUEST,
+    FORGOT_PASSWORD_FAILURE,
+    RESET_PASSWORD_REQUEST,
+    RESET_PASSWORD_FAILURE
     // CONFIRM_TOKEN_REQUEST,
     // CONFIRM_TOKEN_FAILURE
 } from '../types';
@@ -27,6 +31,26 @@ export const userLoginFailure = errors => ({
 export const userLoggedOut = () => ({
     type: USER_LOGGED_OUT
 });
+
+export const forgotPasswordRequest = user => ({
+    type: FORGOT_PASSWORD_REQUEST,
+    user
+});
+
+export const forgotPasswordFailure = errors => ({
+    type: FORGOT_PASSWORD_FAILURE,
+    errors
+})
+
+export const resetPasswordRequest = user => ({
+    type: RESET_PASSWORD_REQUEST,
+    user
+})
+
+export const resetPasswordFailure = errors => ({
+    type: RESET_PASSWORD_FAILURE,
+    errors
+})
 
 export const logout = () => dispatch => {
     localStorage.removeItem("tcJWT");

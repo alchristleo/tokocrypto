@@ -1,4 +1,8 @@
-import { USER_LOGGED_IN, USER_LOGGED_OUT, FETCH_CURRENT_USER_SUCCESS } from '../types';
+import {
+    USER_LOGGED_IN,
+    USER_LOGGED_OUT,
+    FETCH_CURRENT_USER_SUCCESS,
+} from '../types';
 
 export default function user(state = { loaded: false }, action = {}) {
     switch (action.type) {

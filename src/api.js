@@ -10,6 +10,8 @@ export default {
             axios.get("/api/users/current_user").then(res => res.data.user),
         confirm: token =>
             axios.post("/api/auth/confirmation", { token }).then(res => res.data.user),
+        forgot_password: credentials =>
+            axios.post("/api/auth/forgot_password", { credentials }).then(res => res.data.user)
     },
     cryptos: {
         fetchAll: () => axios.get('/api/cryptos').then(res => res.data.cryptos),

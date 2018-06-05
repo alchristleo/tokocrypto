@@ -12,6 +12,8 @@ import ConfirmationPage from './components/pages/ConfirmationPage';
 import DashboardPage from './components/pages/DashboardPage';
 import BuySellPage from './components/pages/BuySellPage';
 import ProfilePage from './components/pages/ProfilePage';
+import ForgotPasswordPage from './components/pages/ForgotPasswordPage';
+import ResetPasswordPage from './components/pages/ResetPasswordPage';
 import { fetchCurrentUserRequest } from "./actions/users";
 import TopNavbar from './components/navigation/TopNavbar';
 
@@ -25,6 +27,8 @@ class App extends Component {
         {isAuthenticated && <TopNavbar />}
         <Route location={location} path="/" exact component={HomePage} />
         <Route location={location} path="/confirmation/:token" exact component={ConfirmationPage} />
+        <Route location={location} path="/forgot_password" exact component={ForgotPasswordPage} />
+        <Route location={location} path="/reset_password/:token" exact component={ResetPasswordPage} />
         <GuestRoute location={location} path="/login" exact component={LoginPage} />
         <GuestRoute location={location} path="/register" exact component={RegisterPage} />
         <UserRoute location={location} path="/dashboard" exact component={DashboardPage} />

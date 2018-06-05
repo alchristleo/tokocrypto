@@ -209,7 +209,7 @@ class TopNavbar extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {tempBuy.map((x, index) =>
+                                        {tempBuy.length > 0 ? tempBuy.map((x, index) =>
                                             (<tr key={index}>
                                                 <td colSpan={2}>{x.assetValue} <span style={{ fontWeight: 500 }}>{x.cryptoAsset}</span></td>
                                                 <td className="text-center">
@@ -222,7 +222,7 @@ class TopNavbar extends React.Component {
                                                         to={'/market/' + x.cryptoAsset}
                                                         onClick={(e) => this.handleClick(x.cryptoAsset, e)}>Market</Link>
                                                 </td>
-                                            </tr>))}
+                                            </tr>)) : <tr className="text-center">You don't have any crypto balance yet</tr>}
                                     </tbody>
                                 </Table>
                             </DropdownMenu>

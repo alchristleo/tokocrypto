@@ -2,6 +2,8 @@ import { call, put } from 'redux-saga/effects';
 import {
     userLoggedIn,
     userLoginFailure,
+    forgotPasswordFailure,
+    resetPasswordFailure
     // confirmTokenFailure 
 } from '../actions/auth';
 import { createUserFailure } from '../actions/users';
@@ -36,6 +38,23 @@ export function* loginUserSaga(action) {
 export function* fetchUserSaga() {
     const user = yield call(api.user.fetchCurrentUser);
     yield put(userLoggedIn(user));
+}
+
+export function* forgotPasswordUserSaga(action) {
+    try {
+        yield call(api.user.forgot_password, action.user);
+        history.push("/reset-password");
+    } catch (err) {
+        yield put(forgotPasswordFailure(err.response.data.errors))
+    }
+}
+
+export function* resetPasswordUserSaga(action) {
+    try {
+
+    } catch (err) {
+        yield put(resetPasswordFailure(err.response.data.errors));
+    }
 }
 
 // export function* confirmUserSaga(action) {
