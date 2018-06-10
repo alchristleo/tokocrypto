@@ -237,14 +237,13 @@ class TopNavbar extends React.Component {
                                 <span style={{ marginLeft: 5, color: "white" }}>{user.username}</span>
                             </DropdownToggle>
                             <DropdownMenu right>
-                                <DropdownItem><Link
-                                    to="/account/history"
-                                    style={{ color: "#000", textDecoration: "none" }}
-                                >
-                                    My Account
-                            </Link></DropdownItem>
+                                <Link to="/account/history" className="di_list__white">
+                                    <DropdownItem className="di_list" style={{ cursor: "pointer" }}>
+                                        My Account
+                                </DropdownItem></Link>
                                 <DropdownItem divider />
-                                <DropdownItem onClick={() => logout()}>Logout</DropdownItem>
+                                <DropdownItem style={{ cursor: "pointer" }}
+                                    className="di_list" onClick={() => logout()}>Logout</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>

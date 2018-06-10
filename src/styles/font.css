@@ -50,6 +50,31 @@ tr:hover {
     border-color: #ff5722;
 }
 
+.di_list:hover {
+    background-color: #42b549;
+    color: #fff;
+}
+
+.di_list:hover, .di_list:hover + a.di_list__white:hover {
+    background-color: #42b549;
+    color: #fff;
+}
+
+.di_list__white {
+    color: #000;
+    text-decoration: none;
+}
+
+.di_list__white:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.di_list__white:active {
+    color: #fff;
+    text-decoration: none;
+}
+
 .dropdown-item:active {
     text-decoration: none;
     background-color: #42b549;
