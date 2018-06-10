@@ -6,7 +6,9 @@ import {
     FORGOT_PASSWORD_REQUEST,
     FORGOT_PASSWORD_FAILURE,
     RESET_PASSWORD_REQUEST,
-    RESET_PASSWORD_FAILURE
+    RESET_PASSWORD_FAILURE,
+    VALIDATE_TOKEN_REQUEST,
+    VALIDATE_TOKEN_FAILURE
     // CONFIRM_TOKEN_REQUEST,
     // CONFIRM_TOKEN_FAILURE
 } from '../types';
@@ -40,17 +42,26 @@ export const forgotPasswordRequest = user => ({
 export const forgotPasswordFailure = errors => ({
     type: FORGOT_PASSWORD_FAILURE,
     errors
-})
+});
 
-export const resetPasswordRequest = user => ({
-    type: RESET_PASSWORD_REQUEST,
-    user
-})
+export const validateTokenRequest = token => () => api.user.validate_token(token);
+
+export const validateTokenFailure = errors => ({
+    type: VALIDATE_TOKEN_FAILURE,
+    errors
+});
+
+export const resetPasswordRequest = data => () => api.user.reset_password(data);
 
 export const resetPasswordFailure = errors => ({
     type: RESET_PASSWORD_FAILURE,
     errors
-})
+});
+
+// export const validateTokenRequest = token => ({
+//     type: VALIDATE_TOKEN_REQUEST,
+//     token
+// })
 
 export const logout = () => dispatch => {
     localStorage.removeItem("tcJWT");

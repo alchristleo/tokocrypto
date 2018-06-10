@@ -3,6 +3,7 @@ import {
     userLoggedIn,
     userLoginFailure,
     forgotPasswordFailure,
+    validateTokenFailure,
     resetPasswordFailure
     // confirmTokenFailure 
 } from '../actions/auth';
@@ -43,9 +44,16 @@ export function* fetchUserSaga() {
 export function* forgotPasswordUserSaga(action) {
     try {
         yield call(api.user.forgot_password, action.user);
-        history.push("/reset-password");
     } catch (err) {
         yield put(forgotPasswordFailure(err.response.data.errors))
+    }
+}
+
+export function* validatePasswordSaga(action) {
+    try {
+
+    } catch (err) {
+        yield put(validateTokenFailure(err.response.data.errors));
     }
 }
 

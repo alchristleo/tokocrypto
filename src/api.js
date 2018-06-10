@@ -11,7 +11,11 @@ export default {
         confirm: token =>
             axios.post("/api/auth/confirmation", { token }).then(res => res.data.user),
         forgot_password: credentials =>
-            axios.post("/api/auth/forgot_password", { credentials }).then(res => res.data.user)
+            axios.post("/api/auth/forgot_password", { credentials }).then(res => res.data.user),
+        validate_token: token =>
+            axios.post("/api/auth/validate_token", { token }),
+        reset_password: data =>
+            axios.post("/api/auth/reset_password", { data })
     },
     cryptos: {
         fetchAll: () => axios.get('/api/cryptos').then(res => res.data.cryptos),

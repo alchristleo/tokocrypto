@@ -29,6 +29,7 @@ class ForgotPasswordForm extends React.Component {
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
             this.props.submit(this.state.data);
+            this.props.onHandleSubmit(this.state.data);
         }
     }
 
@@ -82,7 +83,8 @@ function mapStateToProps(state) {
 }
 
 ForgotPasswordForm.propTypes = {
-    submit: PropTypes.func.isRequired
+    submit: PropTypes.func.isRequired,
+    onHandleSubmit: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, { submit: forgotPasswordRequest })(ForgotPasswordForm);

@@ -2,10 +2,12 @@ import React from 'react';
 import { Container, Button, Form } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { resetPasswordRequest } from '../../actions/auth';
 
 class ResetPasswordForm extends React.Component {
     state = {
         data: {
+            token: this.props.token,
             newPassword: '',
             confirmPassword: ''
         },
@@ -19,10 +21,12 @@ class ResetPasswordForm extends React.Component {
     }
 
     onSubmit = e => {
+        e.preventDefault();
         const errors = this.validate(this.state.data);
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
             this.props.submit(this.state.data);
+            this.props.onSubmitStatus(this.state.data);
         }
     }
 
@@ -90,7 +94,9 @@ class ResetPasswordForm extends React.Component {
 }
 
 ResetPasswordForm.propTypes = {
-    submit: PropTypes.func.isRequired
+    submit: PropTypes.func.isRequired,
+    token: PropTypes.string.isRequired,
+    onSubmitStatus: PropTypes.func.isRequired,
 };
 
-export default connect()(ResetPasswordForm);
+export default connect(null, { submit: resetPasswordRequest })(ResetPasswordForm);

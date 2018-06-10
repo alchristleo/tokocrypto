@@ -28,7 +28,7 @@ class App extends Component {
         <Route location={location} path="/" exact component={HomePage} />
         <Route location={location} path="/confirmation/:token" exact component={ConfirmationPage} />
         <Route location={location} path="/forgot_password" exact component={ForgotPasswordPage} />
-        <Route location={location} path="/reset_password/:token" exact component={ResetPasswordPage} />
+        <GuestRoute location={location} path="/reset_password/:token" exact component={ResetPasswordPage} />
         <GuestRoute location={location} path="/login" exact component={LoginPage} />
         <GuestRoute location={location} path="/register" exact component={RegisterPage} />
         <UserRoute location={location} path="/dashboard" exact component={DashboardPage} />
