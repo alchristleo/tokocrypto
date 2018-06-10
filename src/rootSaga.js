@@ -24,6 +24,6 @@ export default function* rootSaga() {
     yield takeLatest(LOGIN_REQUEST, loginUserSaga);
     yield takeLatest(FORGOT_PASSWORD_REQUEST, forgotPasswordUserSaga);
     yield takeLatest(VALIDATE_TOKEN_REQUEST, validatePasswordSaga);
-    //yield takeLatest(RESET_PASSWORD_REQUEST, resetPasswordUserSaga);
+    yield takeLatest(RESET_PASSWORD_REQUEST, resetPasswordUserSaga);
     //yield takeLatest(CONFIRM_TOKEN_REQUEST, confirmUserSaga);
 }

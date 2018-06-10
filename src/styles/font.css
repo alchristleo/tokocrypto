@@ -35,6 +35,10 @@ tr:hover {
     background-color: #42b549;
 }
 
+.color-white {
+    color: #fff;
+}
+
 .navItem__hover {
     cursor: pointer;
     color: #fff;
@@ -44,4 +48,9 @@ tr:hover {
     color: #fff;
     background-color: #ff5722;
     border-color: #ff5722;
+}
+
+.dropdown-item:active {
+    text-decoration: none;
+    background-color: #42b549;
 }

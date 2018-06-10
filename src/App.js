@@ -16,6 +16,7 @@ import ForgotPasswordPage from './components/pages/ForgotPasswordPage';
 import ResetPasswordPage from './components/pages/ResetPasswordPage';
 import { fetchCurrentUserRequest } from "./actions/users";
 import TopNavbar from './components/navigation/TopNavbar';
+import Footer from './components/navigation/Footer';
 
 class App extends Component {
 
@@ -34,7 +35,7 @@ class App extends Component {
         <UserRoute location={location} path="/dashboard" exact component={DashboardPage} />
         <UserRoute location={location} path="/market/:query" exact component={BuySellPage} />
         <UserRoute location={location} path="/account/history" exact component={ProfilePage} />
-
+        {isAuthenticated && <Footer />}
       </div>
     );
   }
