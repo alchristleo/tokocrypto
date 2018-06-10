@@ -9,6 +9,7 @@ This is the client side/front-end of Tokocrpto created using ReactJS, and redux.
 ## Feature
 1. Login and register authentication using jwt
 2. Email verification after register
+3. Reset password on forgot password page using token
 2. Dashboard page contains list of Cryptos using conimarketcap api 
 3. Sorting based on table header
 4. Market for buying and selling crypto
