@@ -91,7 +91,7 @@ class DetailCrypto extends React.Component {
                                 <span style={{ color: "#e6393e" }}><FaArrowCircleODown /> {item.percent_change_24h}%</span>}
                             </td>
 
-                            <td>{currCryptoBalance ? (currCryptoBalance).toFixed(8) : 0} <span style={{ fontWeight: 500 }}>{item.symbol}</span></td>
+                            <td>{currCryptoBalance ? (currCryptoBalance).toFixed(8) : 0} <span style={{ fontWeight: 600 }}>{item.symbol}</span></td>
                         </tr>
                     ))}
                 </tbody>

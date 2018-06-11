@@ -94,6 +94,7 @@ class TopNavbar extends React.Component {
 
     render() {
         const { user, logout, transactions } = this.props;
+        const { username } = user;
         const { cryptosBTC, cryptos, balance, kurs } = this.state;
         const array = [];
         var tempBuy = [];
@@ -211,7 +212,7 @@ class TopNavbar extends React.Component {
                                     <tbody>
                                         {tempBuy.length > 0 ? tempBuy.map((x, index) =>
                                             (<tr key={index}>
-                                                <td colSpan={2}>{x.assetValue} <span style={{ fontWeight: 500 }}>{x.cryptoAsset}</span></td>
+                                                <td colSpan={2}>{x.assetValue} <span style={{ fontWeight: 600 }}>{x.cryptoAsset}</span></td>
                                                 <td className="text-center">
                                                     <Link
                                                         className="btn btn-primary btn-sm"
@@ -222,7 +223,7 @@ class TopNavbar extends React.Component {
                                                         to={'/market/' + x.cryptoAsset}
                                                         onClick={(e) => this.handleClick(x.cryptoAsset, e)}>Market</Link>
                                                 </td>
-                                            </tr>)) : <tr className="text-center">You don't have any crypto balance yet</tr>}
+                                            </tr>)) : <tr className="text-center"><td>You don't have any crypto balance yet</td></tr>}
                                     </tbody>
                                 </Table>
                             </DropdownMenu>
@@ -234,7 +235,7 @@ class TopNavbar extends React.Component {
                                     src="https://secure.gravatar.com/avatar/1c97abf43b29c030667ed3cba85a7473?size=40"
                                     alt="Gravatar"
                                 />
-                                <span style={{ marginLeft: 5, color: "white" }}>{user.username}</span>
+                                <span style={{ marginLeft: 5, color: "white" }}>{this.props.user.username}</span>
                             </DropdownToggle>
                             <DropdownMenu right>
                                 <Link to="/account/history" className="di_list__white">

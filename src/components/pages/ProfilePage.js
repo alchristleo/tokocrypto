@@ -17,7 +17,7 @@ class ProfilePage extends React.Component {
     render() {
         return (
             <div>
-                <Container>
+                <Container style={{ minHeight: "83.10vh" }}>
                     <Row>
                         <h3 style={{ marginTop: 20 }}>Account History</h3>
                     </Row>
@@ -25,7 +25,7 @@ class ProfilePage extends React.Component {
                         <TransactionHistory />
                     </Row>
                     <div className="row text-center">
-                        <div className="col col-xs-12 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3">
+                        <div className="col col-xs-12 col-sm-12 col-lg-12">
                             <Link
                                 to="/dashboard"
                                 className="btn btn-primary btn-lg"

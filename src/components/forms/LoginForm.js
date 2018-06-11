@@ -57,6 +57,7 @@ class LoginForm extends React.Component {
                         name="email"
                         value={data.email}
                         onChange={this.onChange}
+                        autoComplete="email"
                         className={
                             errors.email ? "form-control is-invalid" : "form-control"
                         }
@@ -72,6 +73,7 @@ class LoginForm extends React.Component {
                         name="password"
                         value={data.password}
                         onChange={this.onChange}
+                        autoComplete="password"
                         className={
                             errors.password ? "form-control is-invalid" : "form-control"
                         }
