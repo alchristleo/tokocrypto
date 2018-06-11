@@ -11,16 +11,9 @@ class InfoBox extends Component {
             monthChangeD: null,
             monthChangeP: null,
             updatedAt: null,
-            //kurs: 0
         }
     }
     componentDidMount() {
-        // fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
-        //     .then(response => response.json())
-        //     .then(kurs => this.setState({ kurs: kurs.USD_IDR.val }));
-
-        // let kurs = this.state.kurs;
-
         this.getData = () => {
             const { data } = this.props;
             const url = 'https://api.coindesk.com/v1/bpi/currentprice/IDR.json';

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NumberFormat from 'react-number-format';
 import '../../../styles/crypto-chart-css/ToolTip.css';
 
 class ToolTip extends Component {
@@ -18,7 +19,13 @@ class ToolTip extends Component {
         return (
             <div className='hover' style={placementStyles}>
                 <div className='date'>{activePoint.d}</div>
-                <div className='price'>{activePoint.p}</div>
+                <div className='price'><NumberFormat
+                    value={activePoint.p}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={'IDR '}
+                    decimalScale={0}
+                /></div>
             </div>
         )
     }

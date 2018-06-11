@@ -93,8 +93,7 @@ class TopNavbar extends React.Component {
     toggle = () => this.setState({ isOpen: !this.state.isOpen });
 
     render() {
-        const { user, logout, transactions } = this.props;
-        const { username } = user;
+        const { logout, transactions } = this.props;
         const { cryptosBTC, cryptos, balance, kurs } = this.state;
         const array = [];
         var tempBuy = [];

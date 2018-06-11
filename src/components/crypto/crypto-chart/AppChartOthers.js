@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
 import '../../../styles/crypto-chart-css/App_chart.css';
 import LineChart from './LineChart';
 import ToolTip from './ToolTip';
 import InfoBox from './InfoBox';
 
-class AppChart extends Component {
+class AppChartOthers extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            cryptos: [],
             fetchingData: true,
             data: null,
             hoverLoc: null,
@@ -17,32 +19,37 @@ class AppChart extends Component {
     }
 
     componentDidMount() {
+        this.getSelectecCrypto();
         const getData = () => {
-            const url = 'https://api.coindesk.com/v1/bpi/historical/close.json?currency=IDR';
-
+            const url = `https://min-api.cryptocompare.com/data/histoday?fsym=${this.props.currCrypto.currCrypto}&tsym=IDR&limit=30&aggregate=1&e=CCCAGG`;
             fetch(url).then(r => r.json())
-                .then((bitcoinData) => {
+                .then((Response) => {
                     const sortedData = [];
-                    let count = 0;
-                    for (let date in bitcoinData.bpi) {
+                    const listData = Response.Data;
+                    for (let i = 0; i < listData.length; i++) {
                         sortedData.push({
-                            d: moment(date).format('MMM DD'),
-                            p: bitcoinData.bpi[date].toLocaleString('us-EN', { style: 'currency', currency: 'IDR' }),
-                            x: count, //previous days
-                            y: bitcoinData.bpi[date] // numerical price
+                            d: moment.unix(listData[i].time).format('MMM DD'),
+                            p: listData[i].close,
+                            x: i,
+                            y: listData[i].close
                         });
-                        count++;
-                    }
+                    };
                     this.setState({
                         data: sortedData,
                         fetchingData: false
-                    })
+                    });
                 })
                 .catch((e) => {
                     console.log(e);
                 });
         }
         getData();
+    }
+
+    async getSelectecCrypto() {
+        fetch("/api/cryptos/current-crypto")
+            .then(response => response.json())
+            .then(data => this.setState({ cryptos: data.cryptos }))
     }
 
     handleChartHover(hoverLoc, activePoint) {
@@ -53,11 +60,14 @@ class AppChart extends Component {
     }
 
     render() {
-        return (
+        const assetName = this.state.cryptos.filter(x => x.symbol === this.props.currCrypto.currCrypto).map(function (y) {
+            return y.name;
+        });
 
+        return (
             <div className='container'>
                 <div className='row'>
-                    <h1 className='title-heading'>30 Day Bitcoin Price Chart</h1>
+                    <h1 className='title-heading'>30 Day {assetName} Price Chart</h1>
                 </div>
                 <div className='row'>
                     {!this.state.fetchingData ?
@@ -85,4 +95,12 @@ class AppChart extends Component {
     }
 }
 
-export default AppChart;
+function mapStateToProps(state) {
+    return {
+        user: state.user,
+        currCrypto: state.currCrypto,
+        cyptos: state.cryptos
+    };
+}
+
+export default connect(mapStateToProps, {})(AppChartOthers);

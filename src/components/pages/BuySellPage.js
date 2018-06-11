@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import DetailCrypto from "../crypto/DetailCrypto";
 import BuyForm from "../forms/BuyForm";
 import SellForm from "../forms/SellForm";
-import AppChart from '../crypto/crypto-chart/AppChart';
+import AppChartBTC from '../crypto/crypto-chart/AppChartBTC';
+import AppChartOthers from '../crypto/crypto-chart/AppChartOthers';
 import { allCryptosSelector } from "../../reducers/crypto";
 import { fetchCryptos } from "../../actions/cryptos";
 import { createTransactions } from "../../actions/transactions";
@@ -40,7 +41,7 @@ class BuySellPage extends React.Component {
           <DetailCrypto transaction={this.state.transaction} />
 
           <Container style={{ marginTop: 50, marginBottom: 20 }}>
-            <AppChart />
+            {currCrypto.currCrypto === 'BTC' ? <AppChartBTC /> : <AppChartOthers />}
           </Container>
 
           <Row style={{ marginTop: 30 }}>

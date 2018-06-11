@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import NumberFormat from 'react-number-format';
 import "../../../styles/crypto-chart-css/LineChart.css";
 
 class LineChart extends Component {
@@ -88,10 +89,10 @@ class LineChart extends Component {
         return (
             <g className="linechart_label">
                 {/* Y AXIS LABELS */}
-                <text transform={`translate(${yLabelSize / 2}, 20)`} textAnchor="middle">
+                <text transform={`translate(${yLabelSize / 3}, 20)`} textAnchor="middle">
                     {this.getY().max.toLocaleString('us-EN', { style: 'currency', currency: 'IDR' })}
                 </text>
-                <text transform={`translate(${yLabelSize / 2}, ${svgHeight - xLabelSize - padding})`} textAnchor="middle">
+                <text transform={`translate(${yLabelSize / 4}, ${svgHeight - xLabelSize - padding})`} textAnchor="middle">
                     {this.getY().min.toLocaleString('us-EN', { style: 'currency', currency: 'IDR' })}
                 </text>
                 {/* X AXIS LABELS */}
@@ -192,7 +193,7 @@ LineChart.defaultProps = {
     color: '#2196F3',
     pointRadius: 5,
     svgHeight: 300,
-    svgWidth: 900,
+    svgWidth: 1200,
     xLabelSize: 20,
     yLabelSize: 80
 }
