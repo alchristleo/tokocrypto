@@ -78,7 +78,8 @@ class ForgotPasswordForm extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        fpErrors: state.formErrors.forgot_password
+        fpErrors: state.formErrors.forgot_password,
+        formErrors: state.formErrors
     }
 }
 

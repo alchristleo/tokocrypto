@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import NumberFormat from 'react-number-format';
 import "../../../styles/crypto-chart-css/LineChart.css";
 
 class LineChart extends Component {

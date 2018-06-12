@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Container, Alert } from 'reactstrap';
 import ForgotPasswordForm from '../forms/ForgotPasswordForm';
 
@@ -23,7 +24,7 @@ class ForgotPasswordPage extends React.Component {
             >
                 {!isDone && <div className="container" style={{ height: "100vh" }}>
                     <div className="row align-items-center" style={{ height: "100vh" }}>
-                        <div className="col col-xs-12 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3">
+                        <div className="col col-xs-12 col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
                             <div className="card">
                                 <h2 className="card-header" style={{
                                     color: "#42b549"
@@ -37,7 +38,7 @@ class ForgotPasswordPage extends React.Component {
                 </div>}
                 {isDone && <div className="container" style={{ height: "100vh" }}>
                     <div className="row align-items-center" style={{ height: "100vh" }}>
-                        <div className="col col-xs-12 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3">
+                        <div className="col col-xs-12 col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
                             <div className="card">
                                 <h2 className="card-header" style={{
                                     color: "#42b549"
@@ -56,4 +57,10 @@ class ForgotPasswordPage extends React.Component {
     };
 };
 
-export default ForgotPasswordPage;
+function mapStateToProps(state) {
+    return {
+        formErrors: state.formErrors
+    }
+}
+
+export default connect(mapStateToProps, {})(ForgotPasswordPage);

@@ -22,7 +22,6 @@ class AppChartBTC extends Component {
 
             fetch(url).then(r => r.json())
                 .then((bitcoinData) => {
-                    console.log(bitcoinData);
                     const sortedData = [];
                     let count = 0;
                     for (let date in bitcoinData.bpi) {
@@ -58,7 +57,7 @@ class AppChartBTC extends Component {
 
             <div className='container'>
                 <div className='row'>
-                    <h1 className='title-heading'>30 Day Bitcoin Price Chart</h1>
+                    <h1 className='title-heading'>30 Days Bitcoin Price Chart</h1>
                 </div>
                 <div className='row'>
                     {!this.state.fetchingData ?

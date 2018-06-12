@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import '../../../styles/crypto-chart-css/App_chart.css';
 import LineChart from './LineChart';
 import ToolTip from './ToolTip';
-import InfoBox from './InfoBox';
+import InfoBoxOthers from './InfoBoxOthers';
 
 class AppChartOthers extends Component {
     constructor(props) {
@@ -14,11 +14,13 @@ class AppChartOthers extends Component {
             fetchingData: true,
             data: null,
             hoverLoc: null,
-            activePoint: null
+            activePoint: null,
+            kurs: 0
         }
     }
 
     componentDidMount() {
+        //this.getKurs();
         this.getSelectecCrypto();
         const getData = () => {
             const url = `https://min-api.cryptocompare.com/data/histoday?fsym=${this.props.currCrypto.currCrypto}&tsym=IDR&limit=30&aggregate=1&e=CCCAGG`;
@@ -29,11 +31,12 @@ class AppChartOthers extends Component {
                     for (let i = 0; i < listData.length; i++) {
                         sortedData.push({
                             d: moment.unix(listData[i].time).format('MMM DD'),
-                            p: listData[i].close,
+                            p: (listData[i].close),
                             x: i,
-                            y: listData[i].close
+                            y: (listData[i].close)
                         });
                     };
+                    console.log(sortedData);
                     this.setState({
                         data: sortedData,
                         fetchingData: false
@@ -44,6 +47,12 @@ class AppChartOthers extends Component {
                 });
         }
         getData();
+    }
+
+    async getKurs() {
+        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
+            .then(response => response.json())
+            .then(data => this.setState({ kurs: data.USD_IDR.val }));
     }
 
     async getSelectecCrypto() {
@@ -63,15 +72,16 @@ class AppChartOthers extends Component {
         const assetName = this.state.cryptos.filter(x => x.symbol === this.props.currCrypto.currCrypto).map(function (y) {
             return y.name;
         });
+        this.getKurs();
 
         return (
             <div className='container'>
                 <div className='row'>
-                    <h1 className='title-heading'>30 Day {assetName} Price Chart</h1>
+                    <h1 className='title-heading'>30 Days {assetName} Price Chart</h1>
                 </div>
                 <div className='row'>
                     {!this.state.fetchingData ?
-                        <InfoBox data={this.state.data} />
+                        <InfoBoxOthers data={this.state.data} kurs={this.state.kurs} />
                         : null}
                 </div>
                 <div className='row'>
