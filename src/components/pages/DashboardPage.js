@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import { Container, Alert } from 'reactstrap';
 import TableCrypto from '../crypto/TableCrypto';
 import { fetchCurrCrypto, fetchCryptos } from '../../actions/cryptos';
 import { fetchTransactions } from '../../actions/transactions';
 import { allCryptosSelector } from "../../reducers/crypto";
+import '../../styles/font.css';
 
 class DashboardPage extends React.Component {
     constructor(props) {
@@ -14,16 +16,25 @@ class DashboardPage extends React.Component {
         this.state = {
             visible: true,
             currCypto: '',
-            kurs: 0
+            loaded: true
+
         };
 
         this.onDismiss = this.onDismiss.bind(this);
     }
 
+    componentWillMount = () => {
+        this.setState({ loaded: false });
+    }
+
     componentDidMount = () => {
         this.onInit(this.props);
         this.onInitCryptos(this.props);
-        this.getKurs();
+        this.timer = setTimeout(() => this.setState({ loaded: true }), 3000);
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timer);
     }
 
     onInit = (props) => props.fetchTransactions();
@@ -33,12 +44,6 @@ class DashboardPage extends React.Component {
         this.setState({ visible: false });
     }
 
-
-    async getKurs() {
-        fetch('/api/kurs')
-            .then(data => this.setState({ kurs: data.kurs }));
-    }
-
     submit = data => {
         this.props.fetchCurrCrypto(data);
         this.setState({ currCrypto: data });
@@ -46,24 +51,36 @@ class DashboardPage extends React.Component {
     }
 
     render() {
+        const { loaded } = this.state;
         const { isConfirmed } = this.props;
         return (
-            <div>
+            <div style={!isConfirmed ? { backgroundColor: "#42b549" } : { minHeight: "83vh" }}>
                 {!isConfirmed ?
-                    (<Container style={{ marginTop: 40 }}>
-                        <Alert color="warning" isOpen={this.state.visible} toggle={this.onDismiss} style={{ marginTop: 10 }}>
-                            Please kindly confirm your email address!
-                </Alert>
-                    </Container>) :
-                    (<Container>
+                    (<div className="container" style={{ height: "88vh" }}>
+                        <div className="row align-items-center" style={{ height: "90vh" }}>
+                            <div className="col col-xs-12 col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
+                                <div className="card">
+                                    <h2 className="card-header" style={{
+                                        color: "#42b549"
+                                    }}>tokocrypto</h2>
+                                    <div className="card-body">
+                                        <Alert color="warning">
+                                            Please verify your email address.
+                                    </Alert>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>) :
+                    (<Loader loaded={loaded}><Container>
                         <Alert color="warning" isOpen={this.state.visible} toggle={this.onDismiss} style={{ marginTop: 20 }}>
                             <span style={{ background: "#428BCA", color: "#fff", fontWeight: "bold" }}>NOTICE</span> Digital Asset trading can be considered a high-risk activity, where Digital Asset prices are volatile, and can swing wildly, from day to day. Please use your extreme judgement when making the decision to invest in, or to sell, Digital Assets. TOKOCRYPTO is not soliciting for users to buy or sell Digital Assets, as an investment, or for profit. All Digital Asset trading decisions should be made independently by the user.
-                </Alert>
+                            </Alert>
                         <h3 style={{ marginTop: 20 }}>IDR Market</h3>
                         <TableCrypto
                             submit={this.submit}
                         />
-                    </Container>)
+                    </Container></Loader>)
                 }
             </div>
         );

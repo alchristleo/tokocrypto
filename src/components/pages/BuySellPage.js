@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Loader from 'react-loader';
 import { Container, Col, Row } from "reactstrap";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -14,12 +15,22 @@ import { createTransactions } from "../../actions/transactions";
 
 class BuySellPage extends React.Component {
   state = {
-    transaction: null
+    transaction: null,
+    loaded: true
   };
+
+  componentWillMount = () => {
+    this.setState({ loaded: false });
+  }
 
   componentDidMount = () => {
     this.onInit(this.props);
+    this.timer = setTimeout(() => this.setState({ loaded: true }), 3000);
   };
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
 
   onInit = props => props.fetchCryptos();
 
@@ -32,89 +43,92 @@ class BuySellPage extends React.Component {
 
   render() {
     const { currCrypto } = this.props;
+    const { loaded } = this.state;
 
     return (
-      <div>
-        <Container>
-          <h3 style={{ marginTop: 20 }}>{currCrypto.currCrypto}/IDR Market</h3>
+      <div style={{ minHeight: "83vh" }}>
+        <Loader loaded={loaded}>
+          <Container>
+            <h3 style={{ marginTop: 20 }}>{currCrypto.currCrypto}/IDR Market</h3>
 
-          <DetailCrypto transaction={this.state.transaction} />
+            <DetailCrypto transaction={this.state.transaction} />
 
-          <Container style={{ marginTop: 50, marginBottom: 20 }}>
-            {currCrypto.currCrypto === 'BTC' ? <AppChartBTC /> : <AppChartOthers />}
-          </Container>
+            <Container style={{ marginTop: 50, marginBottom: 20 }}>
+              {currCrypto.currCrypto === 'BTC' ? <AppChartBTC /> : <AppChartOthers />}
+            </Container>
 
-          <Row style={{ marginTop: 30 }}>
-            <Col xs={12} sm={6}>
-              <div className="container">
-                <div className="row align-items-center">
-                  <div className="col col-xs-12 col-sm-12 col-lg-12">
-                    <div className="card" style={{ borderWidth: 3 }}>
-                      <h2
-                        className="card-header fontChange"
-                        style={{
-                          color: "#42b549",
-                          fontFamily:
-                            "Helvetica Neue, Helvetica, Arial, sans-serif"
-                        }}
-                      >
-                        Buy {currCrypto.currCrypto}
-                      </h2>
-                      <div className="card-body">
-                        <BuyForm
-                          submit={this.addTransactions}
-                          transaction={this.state.transaction}
-                        />
+            <Row style={{ marginTop: 30 }}>
+              <Col xs={12} sm={6}>
+                <div className="container">
+                  <div className="row align-items-center">
+                    <div className="col col-xs-12 col-sm-12 col-lg-12">
+                      <div className="card" style={{ borderWidth: 3 }}>
+                        <h2
+                          className="card-header fontChange"
+                          style={{
+                            color: "#42b549",
+                            fontFamily:
+                              "Helvetica Neue, Helvetica, Arial, sans-serif"
+                          }}
+                        >
+                          Buy {currCrypto.currCrypto}
+                        </h2>
+                        <div className="card-body">
+                          <BuyForm
+                            submit={this.addTransactions}
+                            transaction={this.state.transaction}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-            <Col xs={12} sm={6}>
-              <div className="container">
-                <div className="row align-items-center">
-                  <div className="col col-xs-12 col-sm-12 col-lg-12">
-                    <div className="card" style={{ borderWidth: 3 }}>
-                      <h2
-                        className="card-header"
-                        style={{
-                          color: "#dc3545",
-                          fontFamily:
-                            "Helvetica Neue, Helvetica, Arial, sans-serif"
-                        }}
-                      >
-                        Sell {currCrypto.currCrypto}
-                      </h2>
-                      <div className="card-body">
-                        <SellForm
-                          submit2={this.addTransactions2}
-                          transaction={this.state.transaction}
-                        />
+              </Col>
+              <Col xs={12} sm={6}>
+                <div className="container">
+                  <div className="row align-items-center">
+                    <div className="col col-xs-12 col-sm-12 col-lg-12">
+                      <div className="card" style={{ borderWidth: 3 }}>
+                        <h2
+                          className="card-header"
+                          style={{
+                            color: "#dc3545",
+                            fontFamily:
+                              "Helvetica Neue, Helvetica, Arial, sans-serif"
+                          }}
+                        >
+                          Sell {currCrypto.currCrypto}
+                        </h2>
+                        <div className="card-body">
+                          <SellForm
+                            submit2={this.addTransactions2}
+                            transaction={this.state.transaction}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
-          <div className="row text-center" style={{ marginTop: 20 }}>
-            <div className="col col-xs-12 col-sm-12 col-lg-12">
-              <Link
-                to="/dashboard"
-                className="btn btn-primary btn-lg"
-                style={{
-                  marginTop: 20,
-                  backgroundColor: "#ff5722",
-                  border: "none",
-                  width: 200
-                }}
-              >
-                Back to Dashboard
+              </Col>
+            </Row>
+            <div className="row text-center" style={{ marginTop: 20 }}>
+              <div className="col col-xs-12 col-sm-12 col-lg-12">
+                <Link
+                  to="/dashboard"
+                  className="btn btn-primary btn-lg"
+                  style={{
+                    marginTop: 20,
+                    backgroundColor: "#ff5722",
+                    border: "none",
+                    width: 200
+                  }}
+                >
+                  Back to Dashboard
               </Link>
+              </div>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </Loader>
       </div>
     );
   }

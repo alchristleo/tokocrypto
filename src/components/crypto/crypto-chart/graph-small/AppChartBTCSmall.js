@@ -33,7 +33,6 @@ class AppChartBTCSmall extends Component {
                             y: (listData[i].close)
                         });
                     };
-                    console.log(sortedData);
                     this.setState({
                         data: sortedData,
                         fetchingData: false

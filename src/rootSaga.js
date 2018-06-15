@@ -6,7 +6,6 @@ import {
     FORGOT_PASSWORD_REQUEST,
     VALIDATE_TOKEN_REQUEST,
     RESET_PASSWORD_REQUEST,
-    //CONFIRM_TOKEN_REQUEST
 } from "./types";
 import {
     createUserSaga,
@@ -15,7 +14,6 @@ import {
     forgotPasswordUserSaga,
     validatePasswordSaga,
     resetPasswordUserSaga
-    //confirmUserSaga
 } from "./sagas/userSagas";
 
 export default function* rootSaga() {
@@ -25,5 +23,4 @@ export default function* rootSaga() {
     yield takeLatest(FORGOT_PASSWORD_REQUEST, forgotPasswordUserSaga);
     yield takeLatest(VALIDATE_TOKEN_REQUEST, validatePasswordSaga);
     yield takeLatest(RESET_PASSWORD_REQUEST, resetPasswordUserSaga);
-    //yield takeLatest(CONFIRM_TOKEN_REQUEST, confirmUserSaga);
 }

@@ -6,7 +6,6 @@ import currCrypto from './reducers/currentCrypto';
 import currKurs from './reducers/currentKurs';
 import transactions from './reducers/transaction';
 import formErrors from './reducers/formErrors';
-//import verifyEmail from './reducers/verifyEmail';
 
 export default combineReducers({
     user,
@@ -15,6 +14,5 @@ export default combineReducers({
     cryptos,
     transactions,
     currKurs
-    //verifyEmail
 });
 

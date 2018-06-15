@@ -18,6 +18,7 @@ import { NavLink as RouterNavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import NumberFormat from 'react-number-format';
 //import gravatarUrl from 'gravatar-url';
+import Loader from 'react-loader';
 import * as actions from '../../actions/auth';
 import { fetchCurrCrypto, fetchCurrKurs } from '../../actions/cryptos';
 import { allTransactionsSelector } from '../../reducers/transaction';
@@ -33,7 +34,12 @@ class TopNavbar extends React.Component {
             cryptos: [],
             isOpen: false,
             balance: 0,
+            loaded: true
         };
+    }
+
+    componentWillMount = () => {
+        this.setState({ loaded: false });
     }
 
     componentDidMount() {
@@ -42,6 +48,7 @@ class TopNavbar extends React.Component {
         this.timer = setInterval(() => this.getBTC(), 300000);
         setInterval(() => this.getCurrentBalance(), 0);
         this.getKurs();
+        this.timer = setTimeout(() => this.setState({ loaded: true }), 3000);
     };
 
     componentWillReceiveProps(props) {
@@ -54,6 +61,10 @@ class TopNavbar extends React.Component {
         this.setState({
             balance: this.props.user.balance - (tAmountBuy - tAmountSell)
         })
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timer);
     }
 
     async getBTC() {
@@ -94,7 +105,7 @@ class TopNavbar extends React.Component {
 
     render() {
         const { logout, transactions, currKurs } = this.props;
-        const { cryptosBTC, cryptos, balance } = this.state;
+        const { cryptosBTC, cryptos, balance, loaded } = this.state;
         const array = [];
         var tempBuy = [];
         let totalAsset = 0;
@@ -189,7 +200,7 @@ class TopNavbar extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr><td><AppChartBTCSmall /></td></tr>
+                                        <tr><td><Loader loaded={loaded}><AppChartBTCSmall /></Loader></td></tr>
                                         <tr style={{ marginTop: 10 }}><td className="text-center">
                                             <Link
                                                 className="btn btn-primary btn-sm"
