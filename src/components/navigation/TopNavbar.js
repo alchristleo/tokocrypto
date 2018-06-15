@@ -19,10 +19,11 @@ import { connect } from 'react-redux';
 import NumberFormat from 'react-number-format';
 //import gravatarUrl from 'gravatar-url';
 import * as actions from '../../actions/auth';
-import { fetchCurrCrypto } from '../../actions/cryptos';
+import { fetchCurrCrypto, fetchCurrKurs } from '../../actions/cryptos';
 import { allTransactionsSelector } from '../../reducers/transaction';
 
 import '../../styles/font.css';
+import AppChartBTCSmall from '../crypto/crypto-chart/graph-small/AppChartBTCSmall';
 
 class TopNavbar extends React.Component {
     constructor(props) {
@@ -32,7 +33,6 @@ class TopNavbar extends React.Component {
             cryptos: [],
             isOpen: false,
             balance: 0,
-            kurs: 0,
         };
     }
 
@@ -69,9 +69,9 @@ class TopNavbar extends React.Component {
     }
 
     async getKurs() {
-        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
+        fetch("/api/cryptos/kurs")
             .then(response => response.json())
-            .then(data => this.setState({ kurs: data.USD_IDR.val }));
+            .then(data => this.props.fetchCurrKurs(data.USD_IDR.val));
     }
 
     getCurrentBalance() {
@@ -93,8 +93,8 @@ class TopNavbar extends React.Component {
     toggle = () => this.setState({ isOpen: !this.state.isOpen });
 
     render() {
-        const { logout, transactions } = this.props;
-        const { cryptosBTC, cryptos, balance, kurs } = this.state;
+        const { logout, transactions, currKurs } = this.props;
+        const { cryptosBTC, cryptos, balance } = this.state;
         const array = [];
         var tempBuy = [];
         let totalAsset = 0;
@@ -140,7 +140,7 @@ class TopNavbar extends React.Component {
         for (let xx = 0; xx < tempBuy.length; xx++) {
             let yy = 0;
             yy = cryptos.filter(vv => vv.symbol === tempBuy[xx].cryptoAsset).map(nn => nn.price_usd);
-            totalAsset += tempBuy[xx].assetValue * yy * kurs;
+            totalAsset += tempBuy[xx].assetValue * yy * currKurs.currKurs;
         }
 
         return (
@@ -172,7 +172,7 @@ class TopNavbar extends React.Component {
                                 <Button outline color="success" style={{ backgroundColor: "#28a745", color: "white" }}>
                                     1 BTC = {cryptosBTC.map(item => (
                                         <span key={item.id}><NumberFormat
-                                            value={item.price_usd * kurs}
+                                            value={item.price_usd * currKurs.currKurs}
                                             displayType={'text'}
                                             thousandSeparator={true}
                                             prefix={'IDR '}
@@ -181,6 +181,29 @@ class TopNavbar extends React.Component {
                                     ))}
                                 </Button>
                             </DropdownToggle>
+                            <DropdownMenu right style={{ width: 580, paddingLeft: 15, paddingRight: 15 }}>
+                                <Table size="sm">
+                                    <thead style={{ backgroundColor: "#28a745", color: "white" }}>
+                                        <tr className="text-center">
+                                            <td>Bitcoin Marketplace Stats</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td><AppChartBTCSmall /></td></tr>
+                                        <tr style={{ marginTop: 10 }}><td className="text-center">
+                                            <Link
+                                                className="btn btn-primary btn-sm"
+                                                style={{
+                                                    backgroundColor: "#ff5722",
+                                                    border: "none"
+                                                }}
+                                                to={'/market/BTC'}
+                                                onClick={(e) => this.handleClick('BTC', e)}>Go to Bitcoin Marketplace</Link>
+                                        </td></tr>
+                                    </tbody>
+                                </Table>
+
+                            </DropdownMenu>
                         </UncontrolledDropdown>
                         <UncontrolledDropdown nav>
                             <DropdownToggle nav>
@@ -263,17 +286,19 @@ TopNavbar.propTypes = {
     transactions: PropTypes.arrayOf(PropTypes.shape({
     }).isRequired).isRequired,
     fetchCurrCrypto: PropTypes.func.isRequired,
+    fetchCurrKurs: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         user: state.user,
-        transactions: allTransactionsSelector(state)
+        transactions: allTransactionsSelector(state),
+        currKurs: state.currKurs
     };
 }
 
 export default connect(
     mapStateToProps,
-    { logout: actions.logout, fetchCurrCrypto },
+    { logout: actions.logout, fetchCurrCrypto, fetchCurrKurs },
     null,
     { pure: false })(TopNavbar);

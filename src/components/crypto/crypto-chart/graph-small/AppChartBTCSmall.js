@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import '../../../styles/crypto-chart-css/App_chart.css';
-import LineChart from './LineChart';
-import ToolTip from './ToolTip';
-import InfoBoxOthers from './InfoBoxOthers';
+import '../../../../styles/crypto-chart-css/App_chart.css';
+import LineChartSmall from './LineChartSmall';
+import ToolTipSmall from './ToolTipSmall';
 
-class AppChartOthers extends Component {
+class AppChartBTCSmall extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,15 +14,13 @@ class AppChartOthers extends Component {
             data: null,
             hoverLoc: null,
             activePoint: null,
-            kurs: 0
         }
     }
 
     componentDidMount() {
-        //this.getKurs();
         this.getSelectecCrypto();
         const getData = () => {
-            const url = `https://min-api.cryptocompare.com/data/histoday?fsym=${this.props.currCrypto.currCrypto}&tsym=IDR&limit=30&aggregate=1&e=CCCAGG`;
+            const url = `https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=IDR&limit=30&aggregate=1&e=CCCAGG`;
             fetch(url).then(r => r.json())
                 .then((Response) => {
                     const sortedData = [];
@@ -49,12 +46,6 @@ class AppChartOthers extends Component {
         getData();
     }
 
-    async getKurs() {
-        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
-            .then(response => response.json())
-            .then(data => this.setState({ kurs: data.USD_IDR.val }));
-    }
-
     async getSelectecCrypto() {
         fetch("/api/cryptos/current-crypto")
             .then(response => response.json())
@@ -69,35 +60,20 @@ class AppChartOthers extends Component {
     }
 
     render() {
-        const assetName = this.state.cryptos.filter(x => x.symbol === this.props.currCrypto.currCrypto).map(function (y) {
-            return y.name;
-        });
-        this.getKurs();
 
         return (
             <div className='container'>
-                <div className='row'>
-                    <h1 className='title-heading'>30 Days {assetName} Price Chart</h1>
-                </div>
-                <div className='row'>
-                    {!this.state.fetchingData ?
-                        <InfoBoxOthers data={this.state.data} kurs={this.state.kurs} />
-                        : null}
-                </div>
-                <div className='row'>
-                    <div className='popup'>
-                        {this.state.hoverLoc ? <ToolTip hoverLoc={this.state.hoverLoc} activePoint={this.state.activePoint} /> : null}
+                <div className='row-small'>
+                    <div className='popup-small'>
+                        {this.state.hoverLoc ? <ToolTipSmall hoverLoc={this.state.hoverLoc} activePoint={this.state.activePoint} /> : null}
                     </div>
                 </div>
-                <div className='row'>
+                <div className='row-small'>
                     <div className='chart'>
                         {!this.state.fetchingData ?
-                            <LineChart data={this.state.data} onChartHover={(a, b) => this.handleChartHover(a, b)} />
+                            <LineChartSmall data={this.state.data} onChartHover={(a, b) => this.handleChartHover(a, b)} />
                             : null}
                     </div>
-                </div>
-                <div className='row'>
-                    <div id="coindesk"> Powered by <a href="http://www.coindesk.com/price/">CoinDesk</a></div>
                 </div>
             </div>
 
@@ -113,4 +89,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, {})(AppChartOthers);
+export default connect(mapStateToProps, {})(AppChartBTCSmall);

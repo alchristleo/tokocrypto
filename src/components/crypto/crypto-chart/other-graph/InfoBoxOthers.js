@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
-import '../../../styles/crypto-chart-css/InfoBox.css';
+import '../../../../styles/crypto-chart-css/InfoBox.css';
 
 class InfoBoxOthers extends Component {
     constructor(props) {
@@ -17,11 +18,11 @@ class InfoBoxOthers extends Component {
 
     componentDidMount() {
         this.getData = () => {
-            const { data, kurs } = this.props;
+            const { data } = this.props;
             fetch('/api/cryptos/').then(r => r.json())
                 .then((bitcoinData) => {
                     const y = bitcoinData.cryptos.filter(a => a.symbol === this.props.currCrypto.currCrypto);
-                    const price = y[0].price_usd * kurs;
+                    const price = y[0].price_usd * this.props.currKurs.currKurs;
                     const change = price - data[0].y;
                     const changeP = (price - data[0].y) / data[0].y * 100;
                     var xyz = moment.unix(y[0].last_updated);
@@ -90,9 +91,16 @@ class InfoBoxOthers extends Component {
     }
 }
 
+InfoBoxOthers.propTypes = {
+    currKurs: PropTypes.shape({
+        currKurs: PropTypes.number.isRequired
+    }).isRequired
+};
+
 function mapStateToProps(state) {
     return {
-        currCrypto: state.currCrypto
+        currCrypto: state.currCrypto,
+        currKurs: state.currKurs
     }
 }
 

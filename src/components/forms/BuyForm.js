@@ -5,14 +5,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from "prop-types";
 import NumberFormat from 'react-number-format';
-import { subsBalance } from '../../actions/balances';
 import { allTransactionsSelector } from '../../reducers/transaction';
-
-const mapDispatchToProps = dispatch => {
-    return {
-        subsBalance: idr => dispatch(subsBalance(idr))
-    };
-};
 
 class BuyForm extends React.Component {
     constructor(props) {
@@ -27,7 +20,6 @@ class BuyForm extends React.Component {
             balance: 0,
             cryptos: [],
             errors: {},
-            kurs: 0
         };
     };
 
@@ -35,7 +27,6 @@ class BuyForm extends React.Component {
         this.getSelectecCrypto();
         this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
         setInterval(() => this.getCurrentBalance(), 0);
-        this.getKurs();
     };
 
     componentWillReceiveProps(props) {
@@ -65,8 +56,6 @@ class BuyForm extends React.Component {
                 .catch(err =>
                     this.setState({ errors: err.response.data.errors })
                 );
-            this.props
-                .subsBalance(this.state.data.totalidr);
         }
         this.setState({
             data: {
@@ -83,12 +72,6 @@ class BuyForm extends React.Component {
         fetch("/api/cryptos/current-crypto")
             .then(response => response.json())
             .then(data => this.setState({ cryptos: data.cryptos }))
-    }
-
-    async getKurs() {
-        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
-            .then(response => response.json())
-            .then(data => this.setState({ kurs: data.USD_IDR.val }));
     }
 
     getCurrentBalance() {
@@ -123,12 +106,12 @@ class BuyForm extends React.Component {
     }
 
     render() {
-        const { currCrypto } = this.props;
-        const { cryptos, errors, data, balance, kurs } = this.state;
+        const { currCrypto, currKurs } = this.props;
+        const { cryptos, errors, data, balance } = this.state;
         let totalGet;
         for (let i = 0; i < cryptos.length; i++) {
             if (cryptos[i].symbol === currCrypto.currCrypto) {
-                totalGet = cryptos.length > 0 ? (data.totalidr / (cryptos[i].price_usd * kurs)).toFixed(9) : 0;
+                totalGet = cryptos.length > 0 ? (data.totalidr / (cryptos[i].price_usd * currKurs.currKurs)).toFixed(9) : 0;
             }
         }
 
@@ -167,7 +150,7 @@ class BuyForm extends React.Component {
                         <FormGroup row>
                             <Label for="price" sm={3}>Price</Label>
                             <Label sm={9}><NumberFormat
-                                value={item.price_usd * kurs}
+                                value={item.price_usd * currKurs.currKurs}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 prefix={'IDR '}
@@ -196,9 +179,11 @@ class BuyForm extends React.Component {
 
 BuyForm.propTypes = {
     submit: PropTypes.func.isRequired,
-    subsBalance: PropTypes.func.isRequired,
     currCrypto: PropTypes.shape({
         currCrypto: PropTypes.string.isRequired,
+    }).isRequired,
+    currKurs: PropTypes.shape({
+        currKurs: PropTypes.number.isRequired,
     }).isRequired,
     transactions: PropTypes.arrayOf(PropTypes.shape({
     }).isRequired).isRequired,
@@ -213,8 +198,9 @@ function mapStateToProps(state) {
     return {
         user: state.user,
         currCrypto: state.currCrypto,
+        currKurs: state.currKurs,
         transactions: allTransactionsSelector(state)
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuyForm);
+export default connect(mapStateToProps, {})(BuyForm);

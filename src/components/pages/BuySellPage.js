@@ -7,7 +7,7 @@ import DetailCrypto from "../crypto/DetailCrypto";
 import BuyForm from "../forms/BuyForm";
 import SellForm from "../forms/SellForm";
 import AppChartBTC from '../crypto/crypto-chart/AppChartBTC';
-import AppChartOthers from '../crypto/crypto-chart/AppChartOthers';
+import AppChartOthers from '../crypto/crypto-chart/other-graph/AppChartOthers';
 import { allCryptosSelector } from "../../reducers/crypto";
 import { fetchCryptos } from "../../actions/cryptos";
 import { createTransactions } from "../../actions/transactions";

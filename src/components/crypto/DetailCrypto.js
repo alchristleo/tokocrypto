@@ -17,26 +17,18 @@ class DetailCrypto extends React.Component {
             type: this.props.type
         },
         currCryptoBalance: 0,
-        kurs: 0
     }
 
     componentDidMount() {
         this.getSelectecCrypto();
         this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
         setInterval(() => this.getCurrentCryptoBalance(), 0);
-        this.getKurs();
     };
 
     async getSelectecCrypto() {
         fetch("/api/cryptos/current-crypto")
             .then(response => response.json())
             .then(data => this.setState({ cryptos: data.cryptos }))
-    }
-
-    async getKurs() {
-        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
-            .then(response => response.json())
-            .then(data => this.setState({ kurs: data.USD_IDR.val }));
     }
 
     getCurrentCryptoBalance() {
@@ -52,8 +44,8 @@ class DetailCrypto extends React.Component {
     }
 
     render() {
-        const { cryptos, currCryptoBalance, kurs } = this.state;
-        const { currCrypto } = this.props;
+        const { cryptos, currCryptoBalance } = this.state;
+        const { currCrypto, currKurs } = this.props;
 
         return (
             <Table bordered hover size="sm">
@@ -73,7 +65,7 @@ class DetailCrypto extends React.Component {
                             <th scope="row">{item.symbol}/IDR</th>
                             <td>{item.name}</td>
                             <td><NumberFormat
-                                value={item.price_usd * kurs}
+                                value={item.price_usd * currKurs.currKurs}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 prefix={'IDR '}
@@ -104,6 +96,7 @@ function mapStateToProps(state) {
     return {
         user: state.user,
         currCrypto: state.currCrypto,
+        currKurs: state.currKurs,
         transactions: allTransactionsSelector(state)
     };
 }

@@ -16,15 +16,13 @@ class TableCrypto extends React.Component {
       sort: {
         column: null,
         direction: "desc"
-      },
-      kurs: 0
+      }
     };
   }
 
   componentDidMount() {
     this.getList();
     this.timer = setInterval(() => this.getList(), 300000);
-    this.getKurs();
   }
 
   onSort = column => e => {
@@ -86,14 +84,6 @@ class TableCrypto extends React.Component {
       .then(data => this.setState({ cryptos: data.cryptos }));
   }
 
-  async getKurs() {
-    fetch(
-      "http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y"
-    )
-      .then(response => response.json())
-      .then(data => this.setState({ kurs: data.USD_IDR.val }));
-  }
-
   setArrow = column => {
     let className = "sort-direction";
 
@@ -107,8 +97,8 @@ class TableCrypto extends React.Component {
   render() {
     const array = [];
     var tempBuy = [];
-    const { cryptos, kurs } = this.state;
-    const { transactions } = this.props;
+    const { cryptos } = this.state;
+    const { transactions, currKurs } = this.props;
     cryptos.map(item => {
       return array.push(transactions.filter(x => x.cryptocur === item.symbol));
     });
@@ -150,7 +140,7 @@ class TableCrypto extends React.Component {
     }
 
     var tables = this.state.cryptos.map(
-      function(item, index) {
+      function (item, index) {
         return (
           <tr
             key={item.id}
@@ -164,7 +154,7 @@ class TableCrypto extends React.Component {
             <td>{item.name}</td>
             <td>
               <NumberFormat
-                value={item.price_usd * kurs}
+                value={item.price_usd * currKurs.currKurs}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={"IDR "}
@@ -186,20 +176,20 @@ class TableCrypto extends React.Component {
                   <FaArrowCircleOUp /> {item.percent_change_24h}%
                 </span>
               ) : (
-                <span style={{ color: "#e6393e" }}>
-                  <FaArrowCircleODown /> {item.percent_change_24h}%
+                  <span style={{ color: "#e6393e" }}>
+                    <FaArrowCircleODown /> {item.percent_change_24h}%
                 </span>
-              )}
+                )}
             </td>
             <td>
               {tempBuy.filter(tb => tb.cryptoAsset === item.symbol).length > 0
                 ? tempBuy
-                    .filter(tb => tb.cryptoAsset === item.symbol)
-                    .map(tbx => {
-                      if (tbx) {
-                        return tbx.assetValue;
-                      }
-                    })
+                  .filter(tb => tb.cryptoAsset === item.symbol)
+                  .map(tbx => {
+                    if (tbx) {
+                      return tbx.assetValue;
+                    }
+                  })
                 : "0"}{" "}
               <span style={{ fontWeight: 600 }}>{item.symbol}</span>
             </td>
@@ -246,7 +236,8 @@ TableCrypto.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    transactions: allTransactionsSelector(state)
+    transactions: allTransactionsSelector(state),
+    currKurs: state.currKurs
   };
 }
 

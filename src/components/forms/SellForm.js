@@ -22,14 +22,12 @@ class SellForm extends React.Component {
         cryptos: [],
         errors: {},
         currCryptoBalance: 0,
-        kurs: 0
     };
 
     componentDidMount() {
         this.getSelectecCrypto();
         this.timer = setInterval(() => this.getSelectecCrypto(), 300000);
         setInterval(() => this.getCurrentCryptoBalance(), 0);
-        this.getKurs();
     };
 
     onChange = (totalGet) => (e) =>
@@ -55,12 +53,6 @@ class SellForm extends React.Component {
         fetch("/api/cryptos/current-crypto")
             .then(response => response.json())
             .then(data => this.setState({ cryptos: data.cryptos }))
-    }
-
-    async getKurs() {
-        fetch('http://free.currencyconverterapi.com/api/v5/convert?q=USD_IDR&compact=y')
-            .then(response => response.json())
-            .then(data => this.setState({ kurs: data.USD_IDR.val }));
     }
 
     getCurrentCryptoBalance() {
@@ -100,12 +92,12 @@ class SellForm extends React.Component {
     }
 
     render() {
-        const { currCrypto } = this.props;
-        const { cryptos, data2, errors, currCryptoBalance, kurs } = this.state;
+        const { currCrypto, currKurs } = this.props;
+        const { cryptos, data2, errors, currCryptoBalance } = this.state;
         let totalGet;
         for (let i = 0; i < cryptos.length; i++) {
             if (cryptos[i].symbol === currCrypto.currCrypto) {
-                totalGet = cryptos.length > 0 ? (data2.totalget * (cryptos[i].price_usd * kurs)).toFixed(0) : 0;
+                totalGet = cryptos.length > 0 ? (data2.totalget * (cryptos[i].price_usd * currKurs.currKurs)).toFixed(0) : 0;
             }
         }
 
@@ -138,7 +130,7 @@ class SellForm extends React.Component {
                         <FormGroup row>
                             <Label for="price" sm={3}>Price</Label>
                             <Label sm={9}><NumberFormat
-                                value={item.price_usd * kurs}
+                                value={item.price_usd * currKurs.currKurs}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 prefix={'IDR '}
@@ -170,6 +162,9 @@ SellForm.propTypes = {
     currCrypto: PropTypes.shape({
         currCrypto: PropTypes.string.isRequired,
     }).isRequired,
+    currKurs: PropTypes.shape({
+        currKurs: PropTypes.number.isRequired,
+    }).isRequired,
     transactions: PropTypes.arrayOf(PropTypes.shape({
     }).isRequired).isRequired,
 };
@@ -178,6 +173,7 @@ function mapStateToProps(state) {
     return {
         user: state.user,
         currCrypto: state.currCrypto,
+        currKurs: state.currKurs,
         transactions: allTransactionsSelector(state)
     };
 }

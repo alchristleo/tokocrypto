@@ -3,6 +3,11 @@
     justify-content: center;
 }
 
+.row-small {
+    display: flex;
+    justify-content: center;
+}
+
 .title-heading {
     padding: 0;
     margin: 0;
@@ -21,4 +26,8 @@
 
 .popup {
     min-height: 50px;
+}
+
+.popup-small {
+    min-height: 20px;
 }

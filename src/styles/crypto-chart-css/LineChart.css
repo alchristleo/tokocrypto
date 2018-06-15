@@ -32,3 +32,38 @@
     stroke: #7D95B6;
     stroke-width: 1;
 }
+
+.linechart-small {
+    padding: 8px;
+}
+
+.linechart_path-small {
+    stroke-width: 3;
+    fill: none;
+}
+
+.linechart_axis-small {
+    stroke: #bdc3c7;
+}
+
+.linechart_point-small {
+    fill: #fff;
+    stroke-width: 2;
+}
+
+.linechart_area-small {
+    padding: 8px;
+    fill: #64B5F6;
+    stroke: none;
+    opacity: .4;
+}
+
+.linechart_label-small {
+    fill: #64B5F6;
+    font-weight: 700;
+}
+
+.hoverLine-small {
+    stroke: #7D95B6;
+    stroke-width: 1;
+}
