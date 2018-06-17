@@ -3,6 +3,7 @@ import FaGithub from "react-icons/lib/fa/github";
 import FaSteam from "react-icons/lib/fa/steam";
 import FaChrome from "react-icons/lib/fa/chrome";
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 class Footer extends React.Component {
   render() {
@@ -56,4 +57,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, {})(Footer);
+export default withRouter(connect(mapStateToProps, {})(Footer));
